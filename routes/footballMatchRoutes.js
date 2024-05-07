@@ -1,30 +1,30 @@
-var express = require('express')
-var router = express.Router()
-var matchController = require('../controllers/footballMatchController')
+var express = require('express');
+var router = express.Router();
+var footballMatchController = require('../controllers/footballMatchController.js');
 
 /*
  * GET
  */
-router.get('/', matchController.list)
+router.get('/', footballMatchController.list);
 
 /*
  * GET
  */
-router.get('/:id', matchController.show)
+router.get('/:id', footballMatchController.show);
 
 /*
  * POST
  */
-router.post('/', matchController.create)
+router.post('/', footballMatchController.create);
 
 /*
  * PUT
  */
-router.put('/:id', matchController.update)
+router.put('/:id', footballMatchController.update);
 
 /*
  * DELETE
  */
-router.delete('/:id', matchController.remove)
+router.delete('/:id', footballMatchController.remove);
 
-module.exports = router
+module.exports = router;

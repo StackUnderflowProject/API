@@ -16,8 +16,7 @@ var footballMatchSchema = new Schema({
 	'location': String,
 	'stadium': {
 		type: Schema.Types.ObjectId,
-		ref: 'stadium',
-		required: false
+		ref: 'footballStadium'
 	}
 })
 

@@ -13,4 +13,4 @@ var footballStadiumSchema = new Schema({
 	'imageUrl': String
 })
 
-module.exports = mongoose.model('footbalStadium', footballStadiumSchema)
+module.exports = mongoose.model('footballStadium', footballStadiumSchema)

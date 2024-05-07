@@ -1,66 +1,61 @@
-var MatchModel = require('../models/footballMatchModel')
-/**
- * matchController.js
- *
- * @description :: Server-side logic for managing matchs.
- */
+var footballMatchModel = require('../models/footballMatchModel.js')
 
+/**
+ * footballMatchController.js
+ *
+ * @description :: Server-side logic for managing footballMatchs.
+ */
 module.exports = {
 
     /**
-     * matchController.list()
+     * footballMatchController.list()
      */
     list: function (req, res) {
-        MatchModel.find()
+        footballMatchModel.find()
             .populate('home')
             .populate('away')
             .populate('stadium')
-            .exec(function (err, matches) {
+            .exec(function (err, footballMatchs) {
                 if (err) {
                     return res.status(500).json({
-                        message: 'Error when getting match.',
+                        message: 'Error when getting footballMatch.',
                         error: err
                     })
                 }
 
-                return res.json(matches)
+                return res.json(footballMatchs)
             })
     },
 
     /**
-     * matchController.show()
+     * footballMatchController.show()
      */
     show: function (req, res) {
         var id = req.params.id
 
-        MatchModel.findById(id)
-            .populate('home')
-            .populate('away')
-            .populate('stadium')
-            .exec(function (err, match) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when getting match.',
-                        error: err
-                    })
-                }
+        footballMatchModel.findById(id).populate('home').populate('away').populate('stadium').exec(function (err, footballMatch) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballMatch.',
+                    error: err
+                })
+            }
 
-                if (!match) {
-                    return res.status(404).json({
-                        message: 'No such match'
-                    })
-                }
+            if (!footballMatch) {
+                return res.status(404).json({
+                    message: 'No such footballMatch'
+                })
+            }
 
-                return res.json(match)
-            })
+            return res.json(footballMatch)
+        })
     },
 
     /**
-     * matchController.create()
+     * footballMatchController.create()
      */
     create: function (req, res) {
-        var match = new MatchModel({
-            _id: req.body._id,
+        var footballMatch = new footballMatchModel({
             date: req.body.date,
             time: req.body.time,
             home: req.body.home,
@@ -70,69 +65,69 @@ module.exports = {
             stadium: req.body.stadium
         })
 
-        match.save(function (err, match) {
+        footballMatch.save(function (err, footballMatch) {
             if (err) {
                 return res.status(500).json({
-                    message: 'Error when creating match',
+                    message: 'Error when creating footballMatch',
                     error: err
                 })
             }
 
-            return res.status(201).json(match)
+            return res.status(201).json(footballMatch)
         })
     },
 
     /**
-     * matchController.update()
+     * footballMatchController.update()
      */
     update: function (req, res) {
         var id = req.params.id
 
-        MatchModel.findOne({ _id: id }, function (err, match) {
+        footballMatchModel.findOne({ _id: id }, function (err, footballMatch) {
             if (err) {
                 return res.status(500).json({
-                    message: 'Error when getting match',
+                    message: 'Error when getting footballMatch',
                     error: err
                 })
             }
 
-            if (!match) {
+            if (!footballMatch) {
                 return res.status(404).json({
-                    message: 'No such match'
+                    message: 'No such footballMatch'
                 })
             }
 
-            match.date = req.body.date ? req.body.date : match.date
-            match.time = req.body.time ? req.body.time : match.time
-            match.home = req.body.home ? req.body.home : match.home
-            match.away = req.body.away ? req.body.away : match.away
-            match.score = req.body.score ? req.body.score : match.score
-            match.location = req.body.location ? req.body.location : match.location
-            match.stadium = req.body.stadium ? req.body.stadium : match.stadium
+            footballMatch.date = req.body.date ? req.body.date : footballMatch.date
+            footballMatch.time = req.body.time ? req.body.time : footballMatch.time
+            footballMatch.home = req.body.home ? req.body.home : footballMatch.home
+            footballMatch.away = req.body.away ? req.body.away : footballMatch.away
+            footballMatch.score = req.body.score ? req.body.score : footballMatch.score
+            footballMatch.location = req.body.location ? req.body.location : footballMatch.location
+            footballMatch.stadium = req.body.stadium ? req.body.stadium : footballMatch.stadium
 
-            match.save(function (err, match) {
+            footballMatch.save(function (err, footballMatch) {
                 if (err) {
                     return res.status(500).json({
-                        message: 'Error when updating match.',
+                        message: 'Error when updating footballMatch.',
                         error: err
                     })
                 }
 
-                return res.json(match)
+                return res.json(footballMatch)
             })
         })
     },
 
     /**
-     * matchController.remove()
+     * footballMatchController.remove()
      */
     remove: function (req, res) {
         var id = req.params.id
 
-        MatchModel.findByIdAndRemove(id, function (err, match) {
+        footballMatchModel.findByIdAndRemove(id, function (err, footballMatch) {
             if (err) {
                 return res.status(500).json({
-                    message: 'Error when deleting the match.',
+                    message: 'Error when deleting the footballMatch.',
                     error: err
                 })
             }

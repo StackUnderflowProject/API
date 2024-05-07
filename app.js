@@ -18,9 +18,9 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var footballTeamRouter = require('./routes/footballTeamRoutes')
-var footballMatchRouter = require('./routes/footballMatchRoutes')
 var stadiumRouter = require('./routes/footballStadiumRoutes')
 var standingRouter = require('./routes/footballStandingRoutes')
+var footballMatchRouter = require('./routes/footballMatchRoutes')
 
 var app = express()
 
@@ -57,9 +57,9 @@ app.use((req, res, next) => {
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/footballTeam', footballTeamRouter)
+app.use('/footballStadium', stadiumRouter)
+app.use('/footballStanding', standingRouter)
 app.use('/footballMatch', footballMatchRouter)
-app.use('/stadium', stadiumRouter)
-app.use('/standing', standingRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
