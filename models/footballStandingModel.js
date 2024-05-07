@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var standingSchema = new Schema({
+var footballStandingSchema = new Schema({
 	'place': Number,
 	'team': {
 		type: Schema.Types.ObjectId,
@@ -16,4 +16,4 @@ var standingSchema = new Schema({
 	'points': Number
 })
 
-module.exports = mongoose.model('standing', standingSchema)
+module.exports = mongoose.model('footballStanding', footballStandingSchema)

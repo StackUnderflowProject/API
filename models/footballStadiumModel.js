@@ -1,8 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
-const footballTeam = require('./footballTeamModel')
 
-var stadiumSchema = new Schema({
+var footballStadiumSchema = new Schema({
 	'name': String,
 	'teamId': {
 		type: Schema.Types.ObjectId,
@@ -14,4 +13,4 @@ var stadiumSchema = new Schema({
 	'imageUrl': String
 })
 
-module.exports = mongoose.model('stadium', stadiumSchema)
+module.exports = mongoose.model('footbalStadium', footballStadiumSchema)

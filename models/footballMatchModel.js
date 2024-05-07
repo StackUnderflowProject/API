@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var matchSchema = new Schema({
+var footballMatchSchema = new Schema({
 	'date': Date,
 	'time': String,
 	'home': {
@@ -21,4 +21,4 @@ var matchSchema = new Schema({
 	}
 })
 
-module.exports = mongoose.model('footballMatch', matchSchema)
+module.exports = mongoose.model('footballMatch', footballMatchSchema)

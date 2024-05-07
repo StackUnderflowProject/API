@@ -13,12 +13,14 @@ mongoose.Promise = global.Promise
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+
+
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var footballTeamRouter = require('./routes/footballTeamRoutes')
 var footballMatchRouter = require('./routes/footballMatchRoutes')
-var stadiumRouter = require('./routes/stadiumRoutes')
-var standingRouter = require('./routes/standingRoutes')
+var stadiumRouter = require('./routes/footballStadiumRoutes')
+var standingRouter = require('./routes/footballStandingRoutes')
 
 var app = express()
 
