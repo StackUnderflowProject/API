@@ -1,11 +1,11 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var footballStandingSchema = new Schema({
+var handballStandingSchema = new Schema({
 	'place': Number,
 	'team': {
 		type: Schema.Types.ObjectId,
-		ref: 'footballTeam'
+		ref: 'handballTeam'
 	},
 	'gamesPlayed': Number,
 	'wins': Number,
@@ -16,4 +16,4 @@ var footballStandingSchema = new Schema({
 	'points': Number
 })
 
-module.exports = mongoose.model('footballStanding', footballStandingSchema)
+module.exports = mongoose.model('handballStanding', handballStandingSchema)

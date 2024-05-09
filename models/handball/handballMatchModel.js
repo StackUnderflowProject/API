@@ -1,23 +1,23 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var footballMatchSchema = new Schema({
+var handballMatchSchema = new Schema({
 	'date': Date,
 	'time': String,
 	'home': {
 		type: Schema.Types.ObjectId,
-		ref: 'footballTeam'
+		ref: 'handballTeam'
 	},
 	'away': {
 		type: Schema.Types.ObjectId,
-		ref: 'footballTeam'
+		ref: 'handballTeam'
 	},
 	'score': String,
 	'location': String,
 	'stadium': {
 		type: Schema.Types.ObjectId,
-		ref: 'footballStadium'
+		ref: 'handballStadium'
 	}
 })
 
-module.exports = mongoose.model('footballMatch', footballMatchSchema)
+module.exports = mongoose.model('handballMatch', handballMatchSchema)

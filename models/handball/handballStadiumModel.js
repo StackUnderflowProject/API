@@ -2,11 +2,11 @@ var mongoose = require('mongoose')
 var GeoJSON = require('mongoose-geojson-schema')
 var Schema = mongoose.Schema
 
-var footballStadiumSchema = new Schema({
+var handballStadiumSchema = new Schema({
 	'name': String,
 	'teamId': {
 		type: Schema.Types.ObjectId,
-		ref: 'footballTeam'
+		ref: 'handballTeam'
 	},
 	'capacity': Number,
 	'location': {
@@ -18,6 +18,6 @@ var footballStadiumSchema = new Schema({
 	'imageUrl': String
 })
 
-footballStadiumSchema.index({ location: '2dsphere' })
+handballStadiumSchema.index({ location: '2dsphere' })
 
-module.exports = mongoose.model('footballStadium', footballStadiumSchema)
+module.exports = mongoose.model('handballStadium', handballStadiumSchema)

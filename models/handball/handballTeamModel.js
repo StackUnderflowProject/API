@@ -2,7 +2,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-var footballTeamSchema = new Schema({
+var handballTeamSchema = new Schema({
 	'name': String,
 	'president': String,
 	'director': String,
@@ -10,4 +10,4 @@ var footballTeamSchema = new Schema({
 	'logoPath': String
 })
 
-module.exports = mongoose.model('footballTeam', footballTeamSchema)
+module.exports = mongoose.model('handballTeam', handballTeamSchema)
