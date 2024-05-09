@@ -9,16 +9,10 @@ var footballStadiumSchema = new Schema({
 		ref: 'footballTeam'
 	},
 	'capacity': Number,
-	location: {
-		type: {
-			type: String,
-			enum: ['Point'], // Only allow 'Point' as type
-			default: 'Point'
-		},
-		coordinates: {
-			type: [Number], // Array of [longitude, latitude]
-			required: false // Set to true if location is mandatory
-		}
+	'location': {
+		type: { type: String },
+		coordinates: [Number],
+		required: false
 	},
 	'buildYear': Number,
 	'imageUrl': String
