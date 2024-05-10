@@ -1,4 +1,4 @@
-var StandingModel = require('../../models/handball/handballStandingModel.js')
+var StandingModel = require('../../models/football/standingModel.js')
 
 /**
  * standingController.js

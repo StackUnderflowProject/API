@@ -7,7 +7,7 @@ require("dotenv").config()
 
 var mongoose = require('mongoose').set('strictQuery', true)
 var mongoDB = process.env.DB_URL
-console.log(mongoDB)
+// console.log(mongoDB)
 
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
@@ -17,14 +17,17 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var adminRouter = require('./routes/adminRouter');
-var footballTeamRouter = require('./routes/footballTeamRoutes')
-var footballStadiumRouter = require('./routes/footballStadiumRoutes')
-var footballStandingRouter = require('./routes/footballStandingRoutes')
-var footballMatchRouter = require('./routes/footballMatchRoutes')
-var handballTeamRouter = require('./routes/handballTeamRoutes')
-var handballStadiumRouter = require('./routes/handballStadiumRoutes')
-var handballStandingRouter = require('./routes/handballStandingRoutes')
-var handballMatchRouter = require('./routes/handballMatchRoutes')
+
+var footballTeamRouter = require('./routes/football/teamRoutes')
+var footballStadiumRouter = require('./routes/football/stadiumRoutes')
+var footballStandingRouter = require('./routes/football/standingRoutes')
+var footballMatchRouter = require('./routes/football/matchRoutes')
+
+var handballTeamRouter = require('./routes/handball/teamRoutes')
+var handballStadiumRouter = require('./routes/handball/stadiumRoutes')
+var handballStandingRouter = require('./routes/handball/standingRoutes')
+var handballMatchRouter = require('./routes/handball/matchRoutes')
+
 
 var app = express()
 
@@ -58,10 +61,12 @@ const { strict } = require('assert')
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/admins', adminRouter)
+
 app.use('/footballTeam', footballTeamRouter)
 app.use('/footballStadium', footballStadiumRouter)
 app.use('/footballStanding', footballStandingRouter)
 app.use('/footballMatch', footballMatchRouter)
+
 app.use('/handballTeam', handballTeamRouter)
 app.use('/handballStadium', handballStadiumRouter)
 app.use('/handballStanding', handballStandingRouter)

@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var stadiumController = require('../controllers/football/footballStadiumController.js')
+var stadiumController = require('../../controllers/football/stadiumController.js')
 
 /*
  * GET
