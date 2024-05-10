@@ -3,6 +3,7 @@ var router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const adminCheck = require('../middleware/adminCheck');
+const jwtAuth = require('../middleware/jwtCheck');
 const userController = require("../controllers/userController");
 
 // profile pictures setup
@@ -25,10 +26,10 @@ router.get('/show/:id', userController.show);
 
 router.post('/register', userController.create);
 
-router.get('/login', userController.login);
+router.post('/login', userController.login);
 
-router.delete('/:id', adminCheck, userController.remove);
+router.delete('/:id', jwtAuth, adminCheck, userController.remove);
 
-router.post('/profilePicture', upload.single('profile_picture'), userController.uploadProfilePicture);
+router.post('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
 
 module.exports = router;
