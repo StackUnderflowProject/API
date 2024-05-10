@@ -19,6 +19,7 @@ async function addAdminIfGatesOpen(user) {
         }
         if (admin.adminGates) {
             admin.users.push(user._id);
+            await admin.save();
             console.log("Successfully added admin");
             return;
         } else {return;}
@@ -144,6 +145,10 @@ module.exports = {
                 const err = new Error('Not authorized, go back!');
                 err.status = 400;
                 throw err;
+            }
+
+            if (!isUserAuthorized(req, user)) {
+                return res.status(403).json({message: 'Error you are not authorized to take this action.'});
             }
 
             // Delete existing profile picture if it exists
