@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var footballTeamController = require('../controllers/footballTeamController.js');
+var footballTeamController = require('../controllers/football/footballTeamController.js');
 
 /*
  * GET

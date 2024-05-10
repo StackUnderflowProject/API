@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var standingController = require('../controllers/footballStandingController.js')
+var standingController = require('../controllers/football/footballStandingController.js')
 
 /*
  * GET

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var footballMatchController = require('../controllers/footballMatchController.js');
+var footballMatchController = require('../controllers/football/footballMatchController.js');
 
 /*
  * GET
