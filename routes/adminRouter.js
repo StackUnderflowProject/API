@@ -1,16 +1,17 @@
 var express = require('express');
 var router = express.Router();
 const adminCheck = require('../middleware/adminCheck');
+const jwtAuth = require('../middleware/jwtCheck');
 const adminController = require('../controllers/adminController');
 
-router.get("/", adminCheck, adminController.list);
+router.get("/", jwtAuth, adminCheck, adminController.list);
 
-router.post("/add", adminCheck, adminController.add);
+router.post("/add/:id", jwtAuth, adminCheck, adminController.add);
 
-router.delete("/remove/:id", adminCheck, adminController.remove);
+router.delete("/remove/:id", jwtAuth, adminCheck, adminController.remove);
 
-router.get("/openGates", adminCheck, adminController.openAdminGates);
+router.get("/openGates", jwtAuth, adminCheck, adminController.openAdminGates);
 
-router.get("/closeGates", adminCheck, adminController.closeAdminGates);
+router.get("/closeGates", jwtAuth, adminCheck, adminController.closeAdminGates);
 
 module.exports = router;
