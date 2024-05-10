@@ -25,7 +25,7 @@ module.exports = {
     },
 
     add: function (req, res) {
-        var id = req.body.id;
+        var id = req.params.id;
         if (!isUserAuthorized(req)) {
             return res.status(403).json({
                 message: 'Error you are not authorized to take this action.'
@@ -68,7 +68,7 @@ module.exports = {
                 });
             }
             // remove user from admin list
-            admin.users = admin.users.filter(item => item !== id);
+            admin.users = admin.users.filter(item => item != id);
             admin.save(function (err, admin) {
                 if (err) {
                     return res.status(500).json({
@@ -105,10 +105,10 @@ module.exports = {
                             error: err
                         });
                     }
-                    return res.status(201).json()
+                    return res.status(201).json({message: "Gates are now opened"})
                 });
             } else {
-                return res.status(201).json()
+                return res.status(201).json({message: "Gates are now opened"})
             }
         });    
     },
@@ -136,10 +136,10 @@ module.exports = {
                             error: err
                         });
                     }
-                    return res.status(201).json()
+                    return res.status(201).json({message: "Gates are now closed"})
                 });
             } else {
-                return res.status(201).json()
+                return res.status(201).json({message: "Gates are now closed"})
             }
         });    
     },
