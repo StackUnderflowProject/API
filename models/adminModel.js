@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
-const adminSchema = new mongoose.Schema({  // zgolj 1 dokument v bazi
+const adminSchema = Schema({  // zgolj 1 dokument v bazi
     adminGates: {type: Boolean, required: true}, // when set to true -> new user registered = admin
     users: {
         type: [{type: Schema.Types.ObjectId, ref: 'user'}],
