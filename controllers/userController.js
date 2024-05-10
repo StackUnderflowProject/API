@@ -146,6 +146,10 @@ module.exports = {
                 throw err;
             }
 
+            if (!isUserAuthorized(req, user)) {
+                return res.status(403).json({message: 'Error you are not authorized to take this action.'});
+            }
+
             // Delete existing profile picture if it exists
             if (user.image && user.image != "") {
                 const imagePath = path.join(__dirname, '..', 'public', 'images', 'profile_pictures', user.image);

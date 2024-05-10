@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 const path = require('path');
-
+const adminCheck = require('../middleware/adminCheck');
 const userController = require("../controllers/userController");
 
 // profile pictures setup
@@ -27,7 +27,7 @@ router.post('/register', userController.create);
 
 router.get('/login', userController.login);
 
-router.delete('/:id', userController.remove);
+router.delete('/:id', adminCheck, userController.remove);
 
 router.post('/profilePicture', upload.single('profile_picture'), userController.uploadProfilePicture);
 
