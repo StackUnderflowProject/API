@@ -19,6 +19,7 @@ async function addAdminIfGatesOpen(user) {
         }
         if (admin.adminGates) {
             admin.users.push(user._id);
+            await admin.save();
             console.log("Successfully added admin");
             return;
         } else {return;}
