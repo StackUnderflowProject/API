@@ -2,6 +2,8 @@ var UserModel = require('../models/userModel.js');
 var AdminModel = require('../models/adminModel.js');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
 require("dotenv").config()
 
 function isUserAuthorized(req, user) {
@@ -140,7 +142,7 @@ module.exports = {
     uploadProfilePicture: async function (req, res, next) {
         if (req.file == undefined) {return res.status(500).json({message: "Internal error when uploading profile picture"})}
         try {
-            const user = await UserModel.findById(req.session.userId).exec();
+            const user = await UserModel.findById(req.userData.id).exec();
             if (!user) {
                 const err = new Error('Not authorized, go back!');
                 err.status = 400;
