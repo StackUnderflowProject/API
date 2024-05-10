@@ -7,19 +7,18 @@ require("dotenv").config()
 
 var mongoose = require('mongoose').set('strictQuery', true)
 var mongoDB = process.env.DB_URL
+console.log(mongoDB)
 
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-
-
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var footballTeamRouter = require('./routes/footballTeamRoutes')
-var stadiumRouter = require('./routes/footballStadiumRoutes')
-var standingRouter = require('./routes/footballStandingRoutes')
+var footballStadiumRouter = require('./routes/footballStadiumRoutes')
+var footballStandingRouter = require('./routes/footballStandingRoutes')
 var footballMatchRouter = require('./routes/footballMatchRoutes')
 
 var app = express()
@@ -34,31 +33,28 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-var session = require('express-session')
-var MongoStore = require('connect-mongo')
-const { env } = require('process')
-const { strict } = require('assert')
-
-app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: mongoDB
-  })
-}))
-
 app.use((req, res, next) => {
-  res.locals.session = req.session
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requsted-Width, Content-Type, Accept, Authorization"
+  )
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT", "POST", "PATCH", "DELETE", "GET")
+    return res.status(200).json({})
+  }
   next()
 })
+
+const { env } = require('process')
+const { strict } = require('assert')
 
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/footballTeam', footballTeamRouter)
-app.use('/footballStadium', stadiumRouter)
-app.use('/footballStanding', standingRouter)
+app.use('/footballStadium', footballStadiumRouter)
+app.use('/footballStanding', footballStandingRouter)
 app.use('/footballMatch', footballMatchRouter)
 
 // catch 404 and forward to error handler

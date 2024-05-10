@@ -1,4 +1,4 @@
-var StadiumModel = require('../models/handballStadiumModel.js')
+var StadiumModel = require('../../models/handball/handballStadiumModel.js')
 
 /**
  * stadiumController.js
