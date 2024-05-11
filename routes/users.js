@@ -30,6 +30,8 @@ router.post('/login', userController.login);
 
 router.delete('/:id', jwtAuth, adminCheck, userController.remove);
 
+router.put('/update/:id', jwtAuth, adminCheck, userController.update);
+
 router.post('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
 
 module.exports = router;
