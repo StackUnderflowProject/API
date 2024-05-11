@@ -116,6 +116,69 @@ module.exports = {
             });
         });
     },
+
+    /**
+     * userController.update()
+     */
+    update: function (req, res) {
+        var id = req.params.id;
+
+        UserModel.findOne({_id: id}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            }
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+            if (!isUserAuthorized(req, user)) {
+                return res.status(403).json({message: 'Error you are not authorized to take this action.'});
+            }
+            UserModel.findOne({username: req.body.username}, async function(e, user2) {
+                if (e) {
+                    return res.status(500).json({
+                        message: 'Error when getting user',
+                        error: e
+                    });
+                }
+                if (user2) {
+                    if (user2._id != id) {
+                        return res.status(409).json({message: "Error user with this username already exists."})
+                    }
+                }
+                user.username = req.body.username ? req.body.username : user.username;
+
+                if (req.body.username != undefined && req.body.username != "") {
+                    try {
+                        const hash = await bcrypt.hash(req.body.password, 10);
+                        user.password = hash;    
+                    } catch (error) {
+                        return res.status(500).json({
+                            message: 'Error when creating user.',
+                            error: err
+                        });
+                    }
+                }
+
+                user.email = req.body.email ? req.body.email : user.email;
+
+                user.save(function (err, user) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when updating user.',
+                            error: err
+                        });
+                    }
+                    return res.json(user);
+                });
+            })
+        });
+    },
+
     /**
      * userController.remove()
      */
