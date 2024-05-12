@@ -132,5 +132,28 @@ module.exports = {
 
             return res.status(204).json()
         })
-    }
+    },
+
+    filterByLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.body.longitude, req.body.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.body.radius
+                }
+            }
+        };
+        StadiumModel.find(locationQuery).exec(function(error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums);
+        })
+    },
 }

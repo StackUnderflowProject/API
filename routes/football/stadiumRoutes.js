@@ -7,6 +7,8 @@ var stadiumController = require('../../controllers/football/stadiumController.js
  */
 router.get('/', stadiumController.list)
 
+router.post('/filterByLocation', stadiumController.filterByLocation);
+
 /*
  * GET
  */
