@@ -8,7 +8,7 @@ var handballMatchController = require('../../controllers/handball/matchControlle
 router.get('/', handballMatchController.list)
 
 
-router.post('/filterByLocation', handballMatchController.filterByLocation);
+router.get('/filterByLocation/:longitude/:latitude/:radius', handballMatchController.filterByLocation);
 /*
  * GET
  */

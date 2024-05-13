@@ -140,9 +140,9 @@ module.exports = {
                 $near: {
                     $geometry: {
                         type: "Point",
-                        coordinates: [req.body.longitude, req.body.latitude] // Longitude, Latitude
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
                     },
-                    $maxDistance: req.body.radius
+                    $maxDistance: req.params.radius
                 }
             }
         };
