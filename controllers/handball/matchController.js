@@ -136,6 +136,58 @@ module.exports = {
         })
     },
 
+    filterByDate: function (req, res) {
+        let date;
+        try {
+            date = new Date(req.body.date);
+        } catch (dateError) {
+            return res.status(400).json({
+                message: 'Date provided isnt in the correct format, must abide: YYYY-MM-DD',
+                error: err
+            })
+        }
+        handballMatchModel.find({date: date})
+        .populate('home').populate('away').populate('stadium')
+        .exec(function(err, matches) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when filtering the handballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(matches);
+        })
+    },
+
+    filterByTeam: function (req, res) {
+        handballMatchModel.find({$or: [{away: req.params.teamId}, {home: req.params.teamId}]})
+        .populate('home').populate('away').populate('stadium')
+        .exec(function(err, matches) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when filtering the handballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(matches);
+        }) 
+    }, 
+
+    filterByStadium: function (req, res) {
+        handballMatchModel.find({stadium: req.params.stadiumId})
+        .populate('home').populate('away').populate('stadium')
+        .exec(function(err, matches) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when filtering the handballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(matches);
+        })
+    },
+
+
     filterByLocation: function (req, res) {
         const locationQuery = {
             location: {
