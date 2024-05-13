@@ -1,5 +1,5 @@
 var handballMatchModel = require('../../models/handball/matchModel.js')
-
+const handballStadiumModel = require('../../models/handball/stadiumModel.js')
 /**
  * handballMatchController.js
  *
@@ -134,5 +134,38 @@ module.exports = {
 
             return res.status(204).json()
         })
-    }
+    },
+
+    filterByLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.body.longitude, req.body.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.body.radius
+                }
+            }
+        };
+        handballStadiumModel.find(locationQuery).select("_id").exec(function(error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the handballMatches.',
+                    error: error
+                })
+            }
+            handballMatchModel.find({stadium: { $in: stadiums}})
+            .populate('home').populate('away').populate('stadium')
+            .exec(function(err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches);
+            })
+        })
+    },
 }
