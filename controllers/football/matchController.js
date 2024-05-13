@@ -141,7 +141,7 @@ module.exports = {
             date = new Date(req.body.date);
         } catch (dateError) {
             return res.status(400).json({
-                message: 'Date provided isnt in the correct format, must abide: YYYY-MM-DD',
+                message: "Date provided isn't in the correct format, must abide: YYYY-MM-DD",
                 error: err
             })
         }
@@ -194,9 +194,9 @@ module.exports = {
                 $near: {
                     $geometry: {
                         type: "Point",
-                        coordinates: [req.body.longitude, req.body.latitude] // Longitude, Latitude
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
                     },
-                    $maxDistance: req.body.radius
+                    $maxDistance: req.params.radius
                 }
             }
         };

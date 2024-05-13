@@ -1,35 +1,34 @@
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
+let createError = require('http-errors')
+let express = require('express')
+let path = require('path')
+let cookieParser = require('cookie-parser')
+let logger = require('morgan')
 require("dotenv").config()
 
-var mongoose = require('mongoose').set('strictQuery', true)
-var mongoDB = process.env.DB_URL
-// console.log(mongoDB)
+let mongoose = require('mongoose').set('strictQuery', true)
+const mongoDB = process.env.DB_URL
 
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
-var db = mongoose.connection
+let db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
-var adminRouter = require('./routes/adminRouter');
+const indexRouter = require('./routes/index')
+const usersRouter = require('./routes/users')
+const adminRouter = require('./routes/adminRouter');
 
-var footballTeamRouter = require('./routes/football/teamRoutes')
-var footballStadiumRouter = require('./routes/football/stadiumRoutes')
-var footballStandingRouter = require('./routes/football/standingRoutes')
-var footballMatchRouter = require('./routes/football/matchRoutes')
+const footballTeamRouter = require('./routes/football/teamRoutes')
+const footballStadiumRouter = require('./routes/football/stadiumRoutes')
+const footballStandingRouter = require('./routes/football/standingRoutes')
+const footballMatchRouter = require('./routes/football/matchRoutes')
 
-var handballTeamRouter = require('./routes/handball/teamRoutes')
-var handballStadiumRouter = require('./routes/handball/stadiumRoutes')
-var handballStandingRouter = require('./routes/handball/standingRoutes')
-var handballMatchRouter = require('./routes/handball/matchRoutes')
+const handballTeamRouter = require('./routes/handball/teamRoutes')
+const handballStadiumRouter = require('./routes/handball/stadiumRoutes')
+const handballStandingRouter = require('./routes/handball/standingRoutes')
+const handballMatchRouter = require('./routes/handball/matchRoutes')
 
 
-var app = express()
+let app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -45,18 +44,14 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requsted-Width, Content-Type, Accept, Authorization"
+    "Origin, X-Requested-Width, Content-Type, Accept, Authorization"
   )
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT", "POST", "PATCH", "DELETE", "GET")
+    res.header("Access-Control-Allow-Methods", ["PUT", "POST", "PATCH", "DELETE", "GET"])
     return res.status(200).json({})
   }
   next()
 })
-
-const { env } = require('process')
-const { strict } = require('assert')
-
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
@@ -78,7 +73,7 @@ app.use(function (req, res, next) {
 })
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}

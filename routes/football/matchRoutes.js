@@ -10,7 +10,7 @@ router.get('/', footballMatchController.list)
 router.get('/filterByTeam/:teamId', footballMatchController.filterByTeam);
 router.get('/filterByStadium/:stadiumId', footballMatchController.filterByStadium);
 
-router.post('/filterByLocation', footballMatchController.filterByLocation);
+router.get('/filterByLocation/:longitude/:latitude/:radius', footballMatchController.filterByLocation);
 router.post('/filterByDate', footballMatchController.filterByDate);
 /*
  * GET
