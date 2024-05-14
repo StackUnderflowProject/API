@@ -10,15 +10,13 @@ function isUserAuthorized(req, user) {
     if (req.userData.username === user.username) {
         return true
     }
-    if (req.isAdmin) {
-        return true
-    }
-    return false
+    return req.isAdmin;
+
 }
 
 async function addAdminIfGatesOpen(user) {
     try {
-        const admin = await AdminModel.findOne({}).exec()
+        const admin = await AdminModel.findOne({})
         if (!admin) {
             console.log("Error: Failed to find admin")
             return
@@ -27,13 +25,9 @@ async function addAdminIfGatesOpen(user) {
             admin.users.push(user._id)
             await admin.save()
             console.log("Successfully added admin")
-            return
-        } else {
-            return
         }
     } catch (err) {
         console.log("Error: AdminModel failed to fetch")
-        return
     }
 }
 
@@ -62,9 +56,9 @@ module.exports = {
      * userController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        UserModel.findOne({_id: id}, function (err, user) {
+        UserModel.findById(id, function (err, user) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting user.',
@@ -85,44 +79,31 @@ module.exports = {
     /**
      * userController.create()
      */
-    create: function (req, res) {
-        UserModel.findOne({username: req.body.username}, function (er, user) {
-            if (er) {
-                return res.status(500).json({
-                    message: 'Error when creating user.',
-                    error: er
-                })
+    create: async function (req, res) {
+        try {
+            const existingUser = await UserModel.findOne({ username: req.body.username });
+
+            if (existingUser) {
+                return res.status(400).json({ message: "User with this username already exists." });
             }
-            if (user) {
-                return res.status(500).json({message: "Error user with this username already exists."})
-            }
+
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
             const newUser = new UserModel({
                 username: req.body.username,
-                password: req.body.password,
+                password: hashedPassword,
                 email: req.body.email
-            })
+            });
+            const savedUser = await newUser.save();
 
-            bcrypt.hash(user.password, 10, function (err, hash) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when creating user.',
-                        error: err
-                    })
-                }
-                newUser.password = hash
-                newUser.save(async function (err, user) {
-                    if (err) {
-                        console.error('Error when creating user:', err)
-                        return res.status(500).json({
-                            message: 'Error when creating user',
-                            error: err
-                        })
-                    }
-                    await addAdminIfGatesOpen(user)
-                    return res.status(201).json(user)
-                })
-            })
-        })
+            return res.status(201).json(savedUser);
+        } catch (err) {
+            console.error('Error when creating user:', err);
+            return res.status(500).json({
+                message: 'Error when creating user',
+                error: err.message
+            });
+        }
     },
 
     /**
@@ -185,7 +166,8 @@ module.exports = {
                 })
             })
         })
-    },
+    }
+    ,
 
     /**
      * userController.remove()
@@ -208,10 +190,11 @@ module.exports = {
             user.remove()
             return res.status(204).json()
         })
-    },
+    }
+    ,
 
     uploadProfilePicture: async function (req, res, next) {
-        if (req.file == undefined) {
+        if (req.file === undefined) {
             return res.status(500).json({message: "Internal error when uploading profile picture"})
         }
         try {
@@ -227,7 +210,7 @@ module.exports = {
             }
 
             // Delete existing profile picture if it exists
-            if (user.image && user.image != "") {
+            if (user.image && user.image !== "") {
                 const imagePath = path.join(__dirname, '..', 'public', 'images', 'profile_pictures', user.image)
                 await fs.promises.access(imagePath, fs.constants.F_OK)
                 await fs.promises.unlink(imagePath)
@@ -245,12 +228,13 @@ module.exports = {
                 error: err
             })
         }
-    },
+    }
+    ,
 
     login: function (req, res, next) {
         UserModel.authenticate(req.body.username, req.body.password, function (err, user) {
             if (err || !user) {
-                var err = new Error('Wrong username or paassword')
+                var err = new Error('Wrong username or password')
                 err.status = 401
                 return next(err)
             }
@@ -264,5 +248,6 @@ module.exports = {
             )
             return res.status(200).json({token: token})
         })
-    },
+    }
+    ,
 }

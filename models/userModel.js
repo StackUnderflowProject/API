@@ -11,7 +11,6 @@ var userSchema = new Schema({
 		required: false,
 	}
 })
-
 userSchema.statics.authenticate = function (username, password, callback) {
 	User.findOne({ username: username })
 		.exec(function (err, user) {
