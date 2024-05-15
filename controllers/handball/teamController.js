@@ -1,4 +1,4 @@
-var handballteamModel = require('../../models/handball/teamModel.js')
+const handballTeamModel = require('../../models/handball/teamModel.js')
 
 /**
  * handballTeamController.js
@@ -11,7 +11,7 @@ module.exports = {
      * handballTeamController.list()
      */
     list: function (req, res) {
-        handballteamModel.find(function (err, handballTeams) {
+        handballTeamModel.find(function (err, handballTeams) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting handballTeam.',
@@ -27,9 +27,9 @@ module.exports = {
      * handballTeamController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        handballteamModel.findOne({ _id: id }, function (err, handballTeam) {
+        handballTeamModel.findOne({ _id: id }, function (err, handballTeam) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting handballTeam.',
@@ -51,7 +51,7 @@ module.exports = {
      * handballTeamController.create()
      */
     create: function (req, res) {
-        var handballTeam = new handballteamModel({
+        const handballTeam = new handballTeamModel({
             _id: req.body._id ? req.body._id : crypto.randomUUID(),
             name: req.body.name,
             president: req.body.president,
@@ -76,9 +76,9 @@ module.exports = {
      * handballTeamController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        handballteamModel.findOne({ _id: id }, function (err, handballTeam) {
+        handballTeamModel.findOne({ _id: id }, function (err, handballTeam) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting handballTeam',
@@ -115,9 +115,9 @@ module.exports = {
      * handballTeamController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        handballteamModel.findByIdAndRemove(id, function (err, handballTeam) {
+        handballTeamModel.findByIdAndRemove(id, function (err, handballTeam) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when deleting the handballTeam.',
@@ -126,6 +126,21 @@ module.exports = {
             }
 
             return res.status(204).json()
+        })
+    },
+
+    filterBySeason: function (req, res) {
+        const season = req.params.season
+
+        handballTeamModel.find({ season: season }, function (err, handballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting handballTeams.',
+                    error: err
+                })
+            }
+
+            return res.json(handballTeams)
         })
     }
 }

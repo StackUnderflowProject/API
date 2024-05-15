@@ -1,13 +1,14 @@
 
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var footballTeamSchema = new Schema({
+const footballTeamSchema = new Schema({
 	'name': String,
 	'president': String,
 	'director': String,
 	'coach': String,
-	'logoPath': String
+	'logoPath': String,
+	'season': Number
 })
 
 module.exports = mongoose.model('footballTeam', footballTeamSchema)

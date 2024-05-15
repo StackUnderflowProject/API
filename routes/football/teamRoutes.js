@@ -1,12 +1,12 @@
-var express = require('express')
-var router = express.Router()
-var footballTeamController = require('../../controllers/football/teamController.js')
+const express = require('express')
+const router = express.Router()
+const footballTeamController = require('../../controllers/football/teamController.js')
 
 /*
  * GET
  */
 router.get('/', footballTeamController.list)
-
+router.get('/filterBySeason/:season', footballTeamController.filterBySeason)
 /*
  * GET
  */

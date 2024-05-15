@@ -1,4 +1,4 @@
-var StandingModel = require('../../models/handball/standingModel.js')
+const StandingModel = require('../../models/handball/standingModel.js')
 
 /**
  * standingController.js
@@ -29,7 +29,7 @@ module.exports = {
      * standingController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StandingModel.findById(id)
             .populate('team')
@@ -55,7 +55,7 @@ module.exports = {
      * standingController.create()
      */
     create: function (req, res) {
-        var standing = new StandingModel({
+        const standing = new StandingModel({
             place: req.body.place,
             team: req.body.team,
             gamesPlayed: req.body.gamesPlayed,
@@ -83,7 +83,7 @@ module.exports = {
      * standingController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StandingModel.findOne({ _id: id }, function (err, standing) {
             if (err) {
@@ -126,7 +126,7 @@ module.exports = {
      * standingController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StandingModel.findByIdAndRemove(id, function (err, standing) {
             if (err) {
@@ -138,5 +138,22 @@ module.exports = {
 
             return res.status(204).json()
         })
+    },
+
+    filterBySeason: function (req, res) {
+        const season = req.params.season
+
+        StandingModel.find({season: season})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
     }
 }

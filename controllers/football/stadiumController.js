@@ -156,4 +156,16 @@ module.exports = {
             return res.status(200).json(stadiums);
         })
     },
+
+    filterBySeason: function (req, res) {
+        StadiumModel.find({ season: req.params.season }).exec(function(error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums);
+        })
+    }
 }

@@ -13,6 +13,9 @@ mongoose.Promise = global.Promise
 let db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+
+
+
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const adminRouter = require('./routes/adminRouter');
@@ -26,7 +29,6 @@ const handballTeamRouter = require('./routes/handball/teamRoutes')
 const handballStadiumRouter = require('./routes/handball/stadiumRoutes')
 const handballStandingRouter = require('./routes/handball/standingRoutes')
 const handballMatchRouter = require('./routes/handball/matchRoutes')
-
 
 let app = express()
 

@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var footballStandingSchema = new Schema({
+const footballStandingSchema = new Schema({
 	'place': Number,
 	'team': {
 		type: Schema.Types.ObjectId,
@@ -13,7 +13,8 @@ var footballStandingSchema = new Schema({
 	'losses': Number,
 	'goalsScored': Number,
 	'goalsConceded': Number,
-	'points': Number
+	'points': Number,
+	'season': Number
 })
 
 module.exports = mongoose.model('footballStanding', footballStandingSchema)

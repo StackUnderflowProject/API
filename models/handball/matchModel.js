@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var handballMatchSchema = new Schema({
+const handballMatchSchema = new Schema({
 	'date': Date,
 	'time': String,
 	'home': {
@@ -17,7 +17,8 @@ var handballMatchSchema = new Schema({
 	'stadium': {
 		type: Schema.Types.ObjectId,
 		ref: 'handballStadium'
-	}
+	},
+	'season': Number
 })
 
 module.exports = mongoose.model('handballMatch', handballMatchSchema)
