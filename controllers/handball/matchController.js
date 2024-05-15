@@ -1,4 +1,4 @@
-var handballMatchModel = require('../../models/handball/matchModel.js')
+const handballMatchModel = require('../../models/handball/matchModel.js')
 const handballStadiumModel = require('../../models/handball/stadiumModel.js')
 /**
  * handballMatchController.js
@@ -31,7 +31,7 @@ module.exports = {
      * handballMatchController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         handballMatchModel.findById(id).populate('home').populate('away').populate('stadium').exec(function (err, handballMatch) {
             if (err) {
@@ -55,7 +55,7 @@ module.exports = {
      * handballMatchController.create()
      */
     create: function (req, res) {
-        var handballMatch = new handballMatchModel({
+        const handballMatch = new handballMatchModel({
             date: req.body.date,
             time: req.body.time,
             home: req.body.home,
@@ -81,9 +81,9 @@ module.exports = {
      * handballMatchController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        handballMatchModel.findOne({ _id: id }, function (err, handballMatch) {
+        handballMatchModel.findOne({_id: id}, function (err, handballMatch) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting handballMatch',
@@ -122,7 +122,7 @@ module.exports = {
      * handballMatchController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         handballMatchModel.findByIdAndRemove(id, function (err, handballMatch) {
             if (err) {
@@ -137,54 +137,54 @@ module.exports = {
     },
 
     filterByDate: function (req, res) {
-        let date;
+        let date
         try {
-            date = new Date(req.body.date);
+            date = new Date(req.body.date)
         } catch (dateError) {
             return res.status(400).json({
                 message: 'Date provided isnt in the correct format, must abide: YYYY-MM-DD',
-                error: err
+                error: dateError
             })
         }
         handballMatchModel.find({date: date})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the handballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home').populate('away').populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterByTeam: function (req, res) {
         handballMatchModel.find({$or: [{away: req.params.teamId}, {home: req.params.teamId}]})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the handballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        }) 
-    }, 
+            .populate('home').populate('away').populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
+    },
 
     filterByStadium: function (req, res) {
         handballMatchModel.find({stadium: req.params.stadiumId})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the handballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home').populate('away').populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
 
@@ -199,25 +199,40 @@ module.exports = {
                     $maxDistance: req.params.radius
                 }
             }
-        };
-        handballStadiumModel.find(locationQuery).select("_id").exec(function(error, stadiums) {
+        }
+        handballStadiumModel.find(locationQuery).select("_id").exec(function (error, stadiums) {
             if (error) {
                 return res.status(500).json({
                     message: 'Error when fetching stadiums in the handballMatches.',
                     error: error
                 })
             }
-            handballMatchModel.find({stadium: { $in: stadiums}})
+            handballMatchModel.find({stadium: {$in: stadiums}})
+                .populate('home').populate('away').populate('stadium')
+                .exec(function (err, matches) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when filtering the handballMatches.',
+                            error: err
+                        })
+                    }
+                    return res.status(200).json(matches)
+                })
+        })
+    },
+
+    filterBySeason: function (req, res) {
+        const season = req.params.season
+        handballMatchModel.find({season: season})
             .populate('home').populate('away').populate('stadium')
-            .exec(function(err, matches) {
+            .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when filtering the handballMatches.',
                         error: err
                     })
                 }
-                return res.status(200).json(matches);
+                return res.status(200).json(matches)
             })
-        })
-    },
+    }
 }

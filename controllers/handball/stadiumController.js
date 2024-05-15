@@ -1,4 +1,4 @@
-var StadiumModel = require('../../models/handball/stadiumModel.js')
+const StadiumModel = require('../../models/handball/stadiumModel.js')
 
 /**
  * stadiumController.js
@@ -29,7 +29,7 @@ module.exports = {
      * stadiumController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StadiumModel.findById(id)
             .populate('teamId')
@@ -55,7 +55,7 @@ module.exports = {
      * stadiumController.create()
      */
     create: function (req, res) {
-        var stadium = new StadiumModel({
+        const stadium = new StadiumModel({
             name: req.body.name,
             teamId: req.body.teamId,
             capacity: req.body.capacity,
@@ -80,9 +80,9 @@ module.exports = {
      * stadiumController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
-        StadiumModel.findOne({ _id: id }, function (err, stadium) {
+        StadiumModel.findById(id, function (err, stadium) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting stadium',
@@ -120,7 +120,7 @@ module.exports = {
      * stadiumController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StadiumModel.findByIdAndRemove(id, function (err, stadium) {
             if (err) {
@@ -156,4 +156,17 @@ module.exports = {
             return res.status(200).json(stadiums);
         })
     },
+
+    filterBySeason: function (req, res) {
+        const season = req.params.season
+        StadiumModel.find({season: season}).exec(function(err, stadiums) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when filtering the handballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(stadiums);
+        })
+    }
 }

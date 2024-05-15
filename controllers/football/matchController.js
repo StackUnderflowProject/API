@@ -1,5 +1,6 @@
-var footballMatchModel = require('../../models/football/matchModel.js')
-var footballStadiumModel = require('../../models/football/stadiumModel.js')/**
+const footballMatchModel = require('../../models/football/matchModel.js')
+const footballStadiumModel = require('../../models/football/stadiumModel.js')
+/**
  * footballMatchController.js
  *
  * @description :: Server-side logic for managing footballMatchs.
@@ -14,7 +15,7 @@ module.exports = {
             .populate('home')
             .populate('away')
             .populate('stadium')
-            .exec(function (err, footballMatchs) {
+            .exec(function (err, footballMatches) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when getting footballMatch.',
@@ -22,7 +23,7 @@ module.exports = {
                     })
                 }
 
-                return res.json(footballMatchs)
+                return res.json(footballMatches)
             })
     },
 
@@ -30,7 +31,7 @@ module.exports = {
      * footballMatchController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         footballMatchModel.findById(id).populate('home').populate('away').populate('stadium').exec(function (err, footballMatch) {
             if (err) {
@@ -54,14 +55,15 @@ module.exports = {
      * footballMatchController.create()
      */
     create: function (req, res) {
-        var footballMatch = new footballMatchModel({
+        const footballMatch = new footballMatchModel({
             date: req.body.date,
             time: req.body.time,
             home: req.body.home,
             away: req.body.away,
             score: req.body.score,
             location: req.body.location,
-            stadium: req.body.stadium
+            stadium: req.body.stadium,
+            season: req.body.season
         })
 
         footballMatch.save(function (err, footballMatch) {
@@ -80,7 +82,7 @@ module.exports = {
      * footballMatchController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         footballMatchModel.findOne({ _id: id }, function (err, footballMatch) {
             if (err) {
@@ -103,6 +105,7 @@ module.exports = {
             footballMatch.score = req.body.score ? req.body.score : footballMatch.score
             footballMatch.location = req.body.location ? req.body.location : footballMatch.location
             footballMatch.stadium = req.body.stadium ? req.body.stadium : footballMatch.stadium
+            footballMatch.season = req.body.season ? req.body.season : footballMatch.season
 
             footballMatch.save(function (err, footballMatch) {
                 if (err) {
@@ -121,7 +124,7 @@ module.exports = {
      * footballMatchController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         footballMatchModel.findByIdAndRemove(id, function (err, footballMatch) {
             if (err) {
@@ -142,7 +145,6 @@ module.exports = {
         } catch (dateError) {
             return res.status(400).json({
                 message: "Date provided isn't in the correct format, must abide: YYYY-MM-DD",
-                error: err
             })
         }
         footballMatchModel.find({date: date})
@@ -170,10 +172,10 @@ module.exports = {
             }
             return res.status(200).json(matches);
         }) 
-    }, 
+    },
 
-    filterByStadium: function (req, res) {
-        footballMatchModel.find({stadium: req.params.stadiumId})
+    filterBySeason: function (req, res) {
+        footballMatchModel.find({season: req.params.season})
         .populate('home').populate('away').populate('stadium')
         .exec(function(err, matches) {
             if (err) {
@@ -186,7 +188,19 @@ module.exports = {
         })
     },
 
-   
+    filterByStadium: function (req, res) {
+        footballMatchModel.find({stadium: req.params.stadium})
+        .populate('home').populate('away').populate('stadium')
+        .exec(function(err, matches) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when filtering the footballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(matches);
+        })
+    },
 
     filterByLocation: function (req, res) {
         const locationQuery = {

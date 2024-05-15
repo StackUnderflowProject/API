@@ -1,8 +1,7 @@
-var mongoose = require('mongoose')
-var GeoJSON = require('mongoose-geojson-schema')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-var footballStadiumSchema = new Schema({
+const footballStadiumSchema = new Schema({
 	'name': String,
 	'teamId': {
 		type: Schema.Types.ObjectId,
@@ -10,12 +9,13 @@ var footballStadiumSchema = new Schema({
 	},
 	'capacity': Number,
 	'location': {
-		type: { type: String },
+		type: {type: String},
 		coordinates: [Number],
 		required: false
 	},
 	'buildYear': Number,
-	'imageUrl': String
+	'imageUrl': String,
+	'season': Number
 })
 
 footballStadiumSchema.index({ location: '2dsphere' })

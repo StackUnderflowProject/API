@@ -1,14 +1,14 @@
-var express = require('express')
-var router = express.Router()
-var stadiumController = require('../../controllers/football/stadiumController.js')
+const express = require('express')
+const router = express.Router()
+const stadiumController = require('../../controllers/football/stadiumController.js')
 
 /*
  * GET
  */
 router.get('/', stadiumController.list)
 
-router.get('/filterByLocation/:longitude/:latitude/:radius', stadiumController.filterByLocation);
-
+router.get('/filterByLocation/:longitude/:latitude/:radius', stadiumController.filterByLocation)
+router.get('/filterBySeason/:season', stadiumController.filterBySeason)
 /*
  * GET
  */

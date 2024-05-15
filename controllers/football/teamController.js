@@ -127,5 +127,20 @@ module.exports = {
 
             return res.status(204).json()
         })
+    },
+
+    filterBySeason: function (req, res) {
+        var season = req.params.season
+
+        FootballteamModel.find({ season: season }, function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            return res.json(footballTeams)
+        })
     }
 }
