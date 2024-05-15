@@ -20,6 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const adminRouter = require('./routes/adminRouter');
+const eventsRouter = require('./routes/events');
 
 const footballTeamRouter = require('./routes/football/teamRoutes')
 const footballStadiumRouter = require('./routes/football/stadiumRoutes')
@@ -33,28 +34,8 @@ const handballMatchRouter = require('./routes/handball/matchRoutes')
 
 let app = express()
 
-// WevSocket
-app.use(cors());
-
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:" + (process.env.PORT || "5000"),
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
-  }
-});
-
-server.listen(5001, () => {
-  console.log("Server is running!");
-})
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'hbs')
-
 // cors rules
-const allowedOrigins = ['*', 'http://localhost:3000'];
+const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173"];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -67,6 +48,29 @@ app.use(cors({
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }));
 
+// Web Socket
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log('User connected: ' + socket.id)
+  //socket.on("")
+})
+
+server.listen(5001, () => {
+  console.log("Server is running!");
+})
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'hbs')
+
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -76,6 +80,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/admins', adminRouter)
+app.use('/events', eventsRouter)
 
 app.use('/footballTeam', footballTeamRouter)
 app.use('/footballStadium', footballStadiumRouter)
