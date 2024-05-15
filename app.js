@@ -49,6 +49,7 @@ app.use(cors({
 }));
 
 // Web Socket
+const eventModel = require('./models/eventModel');
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -58,9 +59,21 @@ const io = new Server(server, {
   }
 });
 
+async function createEvent(socket, data) {
+  let newEvent = new eventModel(data);
+  newEvent.save(newEvent, function(err, event) {
+    if (err) {
+      socket.send("error", {message: "failed to create event"});
+    }
+    //socket.broadcast.emit("new-event", data);
+    socket.emit("new-event", event); 
+  })
+}
+
 io.on("connection", (socket) => {
-  console.log('User connected: ' + socket.id)
-  //socket.on("")
+  socket.on("create-event", (data) => {
+    createEvent(socket, data);
+  })
 })
 
 server.listen(5001, () => {
