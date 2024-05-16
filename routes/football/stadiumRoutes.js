@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const stadiumController = require('../../controllers/football/stadiumController.js')
+const jwtAuth = require('../../middleware/jwtCheck');
+const adminCheck = require('../../middleware/adminCheck');
 
 /*
  * GET
@@ -18,16 +20,16 @@ router.get('/:id', stadiumController.show)
 /*
  * POST
  */
-router.post('/', stadiumController.create)
+router.post('/', jwtAuth, adminCheck, stadiumController.create)
 
 /*
  * PUT
  */
-router.put('/:id', stadiumController.update)
+router.put('/:id', jwtAuth, adminCheck, stadiumController.update)
 
 /*
  * DELETE
  */
-router.delete('/:id', stadiumController.remove)
+router.delete('/:id', jwtAuth, adminCheck, stadiumController.remove)
 
 module.exports = router

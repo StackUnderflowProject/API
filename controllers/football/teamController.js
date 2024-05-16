@@ -51,6 +51,11 @@ module.exports = {
      * footballTeamController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         var footballTeam = new FootballteamModel({
             _id: req.body._id ? req.body._id : crypto.randomUUID(),
             name: req.body.name,
@@ -77,6 +82,10 @@ module.exports = {
      */
     update: function (req, res) {
         var id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         FootballteamModel.findOne({ _id: id }, function (err, footballTeam) {
             if (err) {
@@ -116,6 +125,10 @@ module.exports = {
      */
     remove: function (req, res) {
         var id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         FootballteamModel.findByIdAndRemove(id, function (err, footballTeam) {
             if (err) {

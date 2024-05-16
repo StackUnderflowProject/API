@@ -50,6 +50,7 @@ app.use(cors({
 
 // Web Socket
 const eventModel = require('./models/eventModel');
+const jwt = require('jsonwebtoken');
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -60,15 +61,27 @@ const io = new Server(server, {
 });
 
 async function createEvent(socket, data) {
+  try {
+    const decodedToken = jwt.verify(data.token, process.env.JWT_SECRET);
+    data.host = decodedToken.id;
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      socket.emit("error", {message: "JWT expired."}); 
+      return;
+    } else {
+      socket.emit("new-event", {message: "JWT verification failed."}); 
+      return;
+    }
+  }
   let newEvent = new eventModel(data);
-  newEvent.save(newEvent, function(err, event) {
+  newEvent.save(function(err, event) {
     if (err) {
       socket.send("error", {message: "failed to create event"});
     }
     //socket.broadcast.emit("new-event", data);
     socket.emit("new-event", event); 
   })
-}
+}  
 
 io.on("connection", (socket) => {
   socket.on("create-event", (data) => {
@@ -76,7 +89,7 @@ io.on("connection", (socket) => {
   })
 })
 
-server.listen(5001, () => {
+server.listen(3001, () => {
   console.log("Server is running!");
 })
 

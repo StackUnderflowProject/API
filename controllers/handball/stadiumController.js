@@ -55,6 +55,11 @@ module.exports = {
      * stadiumController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         const stadium = new StadiumModel({
             name: req.body.name,
             teamId: req.body.teamId,
@@ -81,6 +86,10 @@ module.exports = {
      */
     update: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StadiumModel.findById(id, function (err, stadium) {
             if (err) {
@@ -121,6 +130,10 @@ module.exports = {
      */
     remove: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StadiumModel.findByIdAndRemove(id, function (err, stadium) {
             if (err) {

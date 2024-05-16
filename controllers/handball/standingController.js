@@ -55,6 +55,11 @@ module.exports = {
      * standingController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         const standing = new StandingModel({
             place: req.body.place,
             team: req.body.team,
@@ -84,6 +89,10 @@ module.exports = {
      */
     update: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StandingModel.findOne({ _id: id }, function (err, standing) {
             if (err) {
@@ -127,6 +136,10 @@ module.exports = {
      */
     remove: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StandingModel.findByIdAndRemove(id, function (err, standing) {
             if (err) {

@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var eventController = require('../controllers/eventController')
 const jwtAuth = require('../middleware/jwtCheck');
+const adminCheck = require('../middleware/adminCheck');
 
 /*
  * GET
@@ -22,16 +23,16 @@ router.get('/:id', eventController.show)
 /*
  * POST
  */
-router.post('/', eventController.create)
+router.post('/', jwtAuth, eventController.create)
 
 /*
  * PUT
  */
-router.put('/:id', eventController.update)
+router.put('/:id', jwtAuth, adminCheck, eventController.update)
 
 /*
  * DELETE
  */
-router.delete('/:id', eventController.remove)
+router.delete('/:id', jwtAuth, adminCheck, eventController.remove)
 
 module.exports = router

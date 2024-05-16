@@ -1,4 +1,9 @@
 const eventModel = require('../models/eventModel.js')
+
+function isAuthorized(req, event) {
+    return (event.host.equals(req.userData.id) || req.isAdmin);
+} 
+
 /**
  * eventController.js
  *
@@ -61,7 +66,7 @@ module.exports = {
             time: req.body.time,
             score: req.body.score,
             location: req.body.location,
-            host: req.body.host,
+            host: req.userData.id,
             followers: []
         })
 
@@ -131,6 +136,10 @@ module.exports = {
                 })
             }
 
+            if (!isAuthorized(req, event)) {
+                return res.status(401).json({message: "Not authorized!"})
+            }
+
             event.name = req.body.name ? req.body.name : event.name
             event.description = req.body.description ? req.body.description : event.description
             event.activity = req.body.activity ? req.body.activity.toLowerCase() : event.activity
@@ -159,8 +168,8 @@ module.exports = {
      */
     remove: function (req, res) {
         const id = req.params.id
-
-        eventModel.findByIdAndRemove(id, function (err, event) {
+        // ne spreminjaj v findByIdAndDelete
+        eventModel.findById(id, function (err, event) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when deleting the event.',
@@ -168,7 +177,19 @@ module.exports = {
                 })
             }
 
-            return res.status(204).json()
+            if (!isAuthorized(req, event)) {
+                return res.status(401).json({message: "Not authorized!"})
+            }
+
+            event.remove(function(err) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when deleting the event.',
+                        error: err
+                    });
+                }
+                return res.status(204).json();
+            });        
         })
     },
 

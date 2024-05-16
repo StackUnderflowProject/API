@@ -55,6 +55,11 @@ module.exports = {
      * handballMatchController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         const handballMatch = new handballMatchModel({
             date: req.body.date,
             time: req.body.time,
@@ -82,6 +87,10 @@ module.exports = {
      */
     update: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         handballMatchModel.findOne({_id: id}, function (err, handballMatch) {
             if (err) {
@@ -123,6 +132,10 @@ module.exports = {
      */
     remove: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         handballMatchModel.findByIdAndRemove(id, function (err, handballMatch) {
             if (err) {
