@@ -61,7 +61,7 @@ const io = new Server(server, {
 
 async function createEvent(socket, data) {
   let newEvent = new eventModel(data);
-  newEvent.save(newEvent, function(err, event) {
+  newEvent.save(function(err, event) {
     if (err) {
       socket.send("error", {message: "failed to create event"});
     }
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
   })
 })
 
-server.listen(5001, () => {
+server.listen(3001, () => {
   console.log("Server is running!");
 })
 
