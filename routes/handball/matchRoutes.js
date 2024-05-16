@@ -1,6 +1,8 @@
 var express = require('express')
 var router = express.Router()
 var handballMatchController = require('../../controllers/handball/matchController.js')
+const jwtAuth = require('../../middleware/jwtCheck');
+const adminCheck = require('../../middleware/adminCheck');
 
 /*
  * GET
@@ -21,16 +23,16 @@ router.get('/:id', handballMatchController.show)
 /*
  * POST
  */
-router.post('/', handballMatchController.create)
+router.post('/', jwtAuth, adminCheck, handballMatchController.create)
 
 /*
  * PUT
  */
-router.put('/:id', handballMatchController.update)
+router.put('/:id', jwtAuth, adminCheck, handballMatchController.update)
 
 /*
  * DELETE
  */
-router.delete('/:id', handballMatchController.remove)
+router.delete('/:id', jwtAuth, adminCheck, handballMatchController.remove)
 
 module.exports = router

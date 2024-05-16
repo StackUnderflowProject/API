@@ -1,5 +1,6 @@
 const footballMatchModel = require('../../models/football/matchModel.js')
 const footballStadiumModel = require('../../models/football/stadiumModel.js')
+
 /**
  * footballMatchController.js
  *
@@ -55,6 +56,11 @@ module.exports = {
      * footballMatchController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         const footballMatch = new footballMatchModel({
             date: req.body.date,
             time: req.body.time,
@@ -83,6 +89,10 @@ module.exports = {
      */
     update: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         footballMatchModel.findOne({ _id: id }, function (err, footballMatch) {
             if (err) {
@@ -125,6 +135,10 @@ module.exports = {
      */
     remove: function (req, res) {
         const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         footballMatchModel.findByIdAndRemove(id, function (err, footballMatch) {
             if (err) {
