@@ -6,8 +6,9 @@ const handballStandingController = require('../../controllers/handball/standingC
  * GET
  */
 router.get('/', handballStandingController.list)
+router.get('/filterBySeasonAndTeam/:season/:team', handballStandingController.filterBySeasonAndTeam)
 router.get('/filterBySeason/:season', handballStandingController.filterBySeason)
-
+router.get('/filterByTeam/:team', handballStandingController.filterByTeam)
 /*
  * GET
  */

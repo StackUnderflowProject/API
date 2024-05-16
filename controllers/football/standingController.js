@@ -155,5 +155,40 @@ module.exports = {
 
                 return res.json(standings)
             })
+    },
+
+    filterByTeam: function (req, res) {
+        const team = req.params.team
+
+        StandingModel.find({team: team})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
+    },
+
+    filterBySeasonAndTeam: function (req, res) {
+        const season = req.params.season
+        const team = req.params.team
+
+        StandingModel.find({season: season, team: team})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
     }
 }

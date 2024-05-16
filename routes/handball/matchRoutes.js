@@ -7,11 +7,12 @@ var handballMatchController = require('../../controllers/handball/matchControlle
  */
 router.get('/', handballMatchController.list)
 
+router.get('/filterBySeasonAndTeam/:season/:team', handballMatchController.filterBySeasonAndTeam);
 router.get('/filterByLocation/:longitude/:latitude/:radius', handballMatchController.filterByLocation);
 router.get('/filterByTeam/:teamId', handballMatchController.filterByTeam);
 router.get('/filterByStadium/:stadium', handballMatchController.filterByStadium);
 router.get('/filterBySeason/:season', handballMatchController.filterBySeason);
-router.post('/filterByDate', handballMatchController.filterByDate);
+router.get('/filterByDate/:date', handballMatchController.filterByDate);
 
 /*
  * GET

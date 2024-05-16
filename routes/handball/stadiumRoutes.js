@@ -7,6 +7,7 @@ var handballStadiumController = require('../../controllers/handball/stadiumContr
  */
 router.get('/', handballStadiumController.list)
 
+router.get('/filterBySeasonAndLocation/:season/:longitude/:latitude/:radius', handballStadiumController.filterBySeasonAndLocation);
 router.get('/filterByLocation/:longitude/:latitude/:radius', handballStadiumController.filterByLocation);
 router.get('/filterBySeason/:season', handballStadiumController.filterBySeason);
 /*

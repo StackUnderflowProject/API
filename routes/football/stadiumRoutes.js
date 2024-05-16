@@ -7,6 +7,7 @@ const stadiumController = require('../../controllers/football/stadiumController.
  */
 router.get('/', stadiumController.list)
 
+router.get('/filterBySeasonAndLocation/:season/:longitude/:latitude/:radius', stadiumController.filterBySeasonAndLocation)
 router.get('/filterByLocation/:longitude/:latitude/:radius', stadiumController.filterByLocation)
 router.get('/filterBySeason/:season', stadiumController.filterBySeason)
 /*

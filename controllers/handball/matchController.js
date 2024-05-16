@@ -139,7 +139,7 @@ module.exports = {
     filterByDate: function (req, res) {
         let date
         try {
-            date = new Date(req.body.date)
+            date = new Date(req.params.date)
         } catch (dateError) {
             return res.status(400).json({
                 message: 'Date provided isnt in the correct format, must abide: YYYY-MM-DD',
@@ -224,6 +224,22 @@ module.exports = {
     filterBySeason: function (req, res) {
         const season = req.params.season
         handballMatchModel.find({season: season})
+            .populate('home').populate('away').populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
+    },
+
+    filterBySeasonAndTeam: function (req, res) {
+        const season = req.params.season
+        const teamId = req.params.team
+        handballMatchModel.find({season: season, $or: [{away: teamId}, {home: teamId}]})
             .populate('home').populate('away').populate('stadium')
             .exec(function (err, matches) {
                 if (err) {

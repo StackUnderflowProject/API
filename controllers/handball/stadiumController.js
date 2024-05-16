@@ -168,5 +168,36 @@ module.exports = {
             }
             return res.status(200).json(stadiums);
         })
+    },
+
+    filterBySeasonAndLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.params.radius
+                }
+            }
+        };
+        StadiumModel.find(locationQuery).exec(function(error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the handballMatches.',
+                    error: error
+                })
+            }
+            StadiumModel.find({season: req.params.season}).exec(function(err, stadiums) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(stadiums);
+            })
+        })
     }
 }

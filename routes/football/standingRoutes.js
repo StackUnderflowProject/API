@@ -6,6 +6,8 @@ var standingController = require('../../controllers/football/standingController.
  * GET
  */
 router.get('/', standingController.list)
+router.get('/filterBySeasonAndTeam/:season/:team', standingController.filterBySeasonAndTeam)
+router.get('/filterByTeam/:team', standingController.filterByTeam)
 router.get('/filterBySeason/:season', standingController.filterBySeason)
 
 /*

@@ -167,5 +167,28 @@ module.exports = {
             }
             return res.status(200).json(stadiums);
         })
+    },
+
+    filterBySeasonAndLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.params.radius
+                }
+            }
+        };
+        StadiumModel.find({ season: req.params.season }).find(locationQuery).exec(function(error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums);
+        })
     }
 }
