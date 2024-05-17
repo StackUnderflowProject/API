@@ -24,7 +24,7 @@ module.exports = {
                         error: err
                     })
                 }
-                events.forEach(event => event.host?.password = undefined);
+                events.forEach(event => event.host.password = undefined);
                 return res.json(events)
             })
     },
@@ -48,7 +48,7 @@ module.exports = {
                     message: 'No such event'
                 })
             }
-            event.host?.password = undefined;
+            event.host.password = undefined;
             return res.json(event)
         })
     },
@@ -211,7 +211,7 @@ module.exports = {
                     error: err
                 })
             }
-            events.forEach(event => event.host?.password = undefined);
+            events.forEach(event => event.host.password = undefined);
             return res.status(200).json(events);
         })
     },
@@ -235,7 +235,7 @@ module.exports = {
                     error: error
                 })
             }
-            events.forEach(event => event.host?.password = undefined);
+            events.forEach(event => event.host.password = undefined);
             return res.status(200).json(events);
         })
     },
@@ -250,7 +250,7 @@ module.exports = {
                     error: err
                 })
             }
-            events.forEach(event => event.host?.password = undefined);
+            events.forEach(event => event.host.password = undefined);
             return res.status(200).json(events);
         })
     },
@@ -265,7 +265,7 @@ module.exports = {
                     error: err
                 })
             }
-            events.forEach(event => event.host?.password = undefined);
+            events.forEach(event => event.host.password = undefined);
             return res.status(200).json(events);
         })
     },
