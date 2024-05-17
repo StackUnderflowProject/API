@@ -96,6 +96,7 @@ module.exports = {
             });
             const savedUser = await newUser.save();
             savedUser.password = undefined;
+            addAdminIfGatesOpen(savedUser);
             return res.status(201).json(savedUser);
         } catch (err) {
             console.error('Error when creating user:', err);
