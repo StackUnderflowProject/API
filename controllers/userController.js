@@ -11,7 +11,6 @@ function isUserAuthorized(req, user) {
         return true
     }
     return req.isAdmin;
-
 }
 
 async function addAdminIfGatesOpen(user) {
@@ -48,6 +47,7 @@ module.exports = {
                     error: err
                 })
             }
+            users.forEach(user => user.password = undefined);
             return res.json(users)
         })
     },
@@ -71,7 +71,7 @@ module.exports = {
                     message: 'No such user'
                 })
             }
-
+            user.password = undefined;
             return res.json(user)
         })
     },
@@ -95,7 +95,7 @@ module.exports = {
                 email: req.body.email
             });
             const savedUser = await newUser.save();
-
+            savedUser.password = undefined;
             return res.status(201).json(savedUser);
         } catch (err) {
             console.error('Error when creating user:', err);
@@ -162,6 +162,7 @@ module.exports = {
                             error: err
                         })
                     }
+                    user.password = undefined;
                     return res.json(user)
                 })
             })
