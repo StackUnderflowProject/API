@@ -248,7 +248,9 @@ module.exports = {
                 process.env.JWT_SECRET,
                 {expiresIn: "1h"}
             )
-            return res.status(200).json({token: token})
+            user.token = token;
+            user.password = undefined;
+            return res.status(200).json(user)
         })
     }
     ,
