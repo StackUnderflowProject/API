@@ -248,9 +248,11 @@ module.exports = {
                 process.env.JWT_SECRET,
                 {expiresIn: "1h"}
             )
-            user.token = token;
-            user.password = undefined;
-            return res.status(200).json(user)
+            const userObject = user.toObject();
+            userObject.token = token;
+            delete userObject.password;
+
+            return res.status(200).json(userObject)
         })
     }
     ,
