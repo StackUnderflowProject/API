@@ -12,7 +12,7 @@ module.exports = {
      */
     list: function (req, res) {
         StandingModel.find()
-            .populate('team')
+            .populate('team', ['name', 'logoPath'])
             .exec(function (err, standings) {
                 if (err) {
                     return res.status(500).json({
@@ -32,7 +32,7 @@ module.exports = {
         const id = req.params.id
 
         StandingModel.findById(id)
-            .populate('team')
+            .populate('team',['name', 'logoPath'])
             .exec(function (err, standing) {
                 if (err) {
                     return res.status(500).json({
@@ -157,7 +157,7 @@ module.exports = {
         const season = req.params.season
 
         StandingModel.find({season: season})
-            .populate('team')
+            .populate('team',['name', 'logoPath'])
             .exec(function (err, standings) {
                 if (err) {
                     return res.status(500).json({
@@ -174,7 +174,7 @@ module.exports = {
         const team = req.params.team
 
         StandingModel.find({team: team})
-            .populate('team')
+            .populate('team',['name', 'logoPath'])
             .exec(function (err, standings) {
                 if (err) {
                     return res.status(500).json({
@@ -192,7 +192,7 @@ module.exports = {
         const team = req.params.team
 
         StandingModel.find({season: season, team: team})
-            .populate('team')
+            .populate('team',['name', 'logoPath'])
             .exec(function (err, standings) {
                 if (err) {
                     return res.status(500).json({
