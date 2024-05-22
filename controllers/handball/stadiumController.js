@@ -51,6 +51,30 @@ module.exports = {
             })
     },
 
+
+    showByTeamId: function (req, res) {
+        var id = req.params.id
+
+        StadiumModel.findOne({teamId: id})
+            .populate('teamId')
+            .exec(function (err, stadium) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting stadium.',
+                        error: err
+                    })
+                }
+
+                if (!stadium) {
+                    return res.status(404).json({
+                        message: 'No such stadium'
+                    })
+                }
+
+                return res.json(stadium)
+            })
+    },
+
     /**
      * stadiumController.create()
      */

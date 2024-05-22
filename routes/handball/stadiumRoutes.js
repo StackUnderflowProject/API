@@ -15,7 +15,8 @@ router.get('/filterBySeason/:season', handballStadiumController.filterBySeason);
 /*
  * GET
  */
-router.get('/:id', handballStadiumController.show)
+router.get('/:id', handballStadiumController.show);
+router.get('/getByTeam/:id', handballStadiumController.showByTeamId);
 
 /*
  * POST
