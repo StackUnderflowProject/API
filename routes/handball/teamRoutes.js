@@ -13,6 +13,7 @@ router.get('/filterBySeason/:season', handballTeamController.filterBySeason)
  * GET
  */
 router.get('/:id', handballTeamController.show)
+router.get('/latest/:id', handballTeamController.showLatest);
 
 /*
  * POST

@@ -47,6 +47,46 @@ module.exports = {
         })
     },
 
+    showLatest: function (req, res) {
+        var id = req.params.id;
+
+        handballTeamModel.findOne({ _id: id }, function (err, handballTeam) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting handballTeam.',
+                    error: err
+                })
+            }
+
+            if (!handballTeam) {
+                return res.status(404).json({
+                    message: 'No such handballTeam'
+                })
+            }
+
+            if (handballTeam.season === new Date().getFullYear()) {
+                return res.json(handballTeam)
+            }
+
+            handballTeamModel.findOne({name: handballTeam.name, season: new Date().getFullYear()}, function(error, hTeam) {
+                if (error) {
+                    return res.status(500).json({
+                        message: 'Error when getting handballTeam.',
+                        error: error
+                    })
+                }
+    
+                if (!hTeam) {
+                    return res.status(404).json({
+                        message: 'No such handballTeam'
+                    })
+                }
+
+                return res.json(hTeam);
+            })
+        })
+    },
+
     /**
      * handballTeamController.create()
      */

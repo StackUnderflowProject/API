@@ -12,7 +12,8 @@ router.get('/filterBySeason/:season', footballTeamController.filterBySeason)
 /*
  * GET
  */
-router.get('/:id', footballTeamController.show)
+router.get('/:id', footballTeamController.show);
+router.get('/latest/:id', footballTeamController.showLatest);
 
 /*
  * POST

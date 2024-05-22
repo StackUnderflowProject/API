@@ -47,6 +47,46 @@ module.exports = {
         })
     },
 
+    showLatest: function (req, res) {
+        var id = req.params.id;
+
+        FootballteamModel.findOne({ _id: id }, function (err, footballTeam) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            if (!footballTeam) {
+                return res.status(404).json({
+                    message: 'No such footballTeam'
+                })
+            }
+
+            if (footballTeam.season === new Date().getFullYear()) {
+                return res.json(footballTeam)
+            }
+
+            FootballteamModel.findOne({name: footballTeam.name, season: new Date().getFullYear()}, function(error, fTeam) {
+                if (error) {
+                    return res.status(500).json({
+                        message: 'Error when getting footballTeam.',
+                        error: error
+                    })
+                }
+    
+                if (!fTeam) {
+                    return res.status(404).json({
+                        message: 'No such footballTeam'
+                    })
+                }
+
+                return res.json(fTeam);
+            })
+        })
+    },
+
     /**
      * footballTeamController.create()
      */
