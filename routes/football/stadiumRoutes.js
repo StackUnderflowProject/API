@@ -15,7 +15,8 @@ router.get('/filterBySeason/:season', stadiumController.filterBySeason)
 /*
  * GET
  */
-router.get('/:id', stadiumController.show)
+router.get('/:id', stadiumController.show);
+router.get('/getByTeam/:id', stadiumController.showByTeamId);
 
 /*
  * POST
