@@ -29,6 +29,22 @@ module.exports = {
             })
     },
 
+    listUpcoming: function (req, res) {
+        eventModel.find({ date: { $gte: new Date() } })
+            .populate('host')
+            .exec(function (err, events) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting events.',
+                        error: err
+                    });
+                }
+                events.forEach(event => event.host.password = undefined);
+                return res.json(events);
+            });
+    },
+    
+
     /**
      * eventController.show()
      */
@@ -57,7 +73,7 @@ module.exports = {
      * eventController.create()
      */
     create: function (req, res) {
-
+        console.log(req.body)
         const event = new eventModel({
             name: req.body.name,
             description: req.body.description,

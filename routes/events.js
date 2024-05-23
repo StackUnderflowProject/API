@@ -9,6 +9,7 @@ const adminCheck = require('../middleware/adminCheck');
  */
 router.get('/', eventController.list)
 router.get('/follow/:eventId', jwtAuth, eventController.follow);
+router.get('/upcoming', eventController.listUpcoming);
 
 router.get('/filterByHost/:hostId', eventController.filterByHost);
 router.get('/filterByLocation/:longitude/:latitude/:radius', eventController.filterByLocation);
