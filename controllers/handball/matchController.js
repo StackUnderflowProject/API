@@ -12,10 +12,10 @@ module.exports = {
      */
     list: function (req, res) {
         handballMatchModel.find()
-            .populate('home')
-            .populate('away')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
             .populate('stadium')
-            .exec(function (err, handballMatchs) {
+            .exec(function (err, handballMatches) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when getting handballMatch.',
@@ -23,7 +23,7 @@ module.exports = {
                     })
                 }
 
-                return res.json(handballMatchs)
+                return res.json(handballMatches)
             })
     },
 
@@ -33,7 +33,10 @@ module.exports = {
     show: function (req, res) {
         const id = req.params.id
 
-        handballMatchModel.findById(id).populate('home').populate('away').populate('stadium').exec(function (err, handballMatch) {
+        handballMatchModel.findById(id)
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium').exec(function (err, handballMatch) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting handballMatch.',
@@ -160,7 +163,9 @@ module.exports = {
             })
         }
         handballMatchModel.find({date: date})
-            .populate('home').populate('away').populate('stadium')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
@@ -174,7 +179,9 @@ module.exports = {
 
     filterByTeam: function (req, res) {
         handballMatchModel.find({$or: [{away: req.params.teamId}, {home: req.params.teamId}]})
-            .populate('home').populate('away').populate('stadium')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
@@ -188,7 +195,9 @@ module.exports = {
 
     filterByStadium: function (req, res) {
         handballMatchModel.find({stadium: req.params.stadiumId})
-            .populate('home').populate('away').populate('stadium')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
@@ -221,7 +230,9 @@ module.exports = {
                 })
             }
             handballMatchModel.find({stadium: {$in: stadiums}})
-                .populate('home').populate('away').populate('stadium')
+                .populate('home', ['name', 'logoPath'])
+                .populate('away', ['name', 'logoPath'])
+                .populate('stadium')
                 .exec(function (err, matches) {
                     if (err) {
                         return res.status(500).json({
@@ -237,7 +248,9 @@ module.exports = {
     filterBySeason: function (req, res) {
         const season = req.params.season
         handballMatchModel.find({season: season})
-            .populate('home').populate('away').populate('stadium')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
@@ -253,7 +266,36 @@ module.exports = {
         const season = req.params.season
         const teamId = req.params.team
         handballMatchModel.find({season: season, $or: [{away: teamId}, {home: teamId}]})
-            .populate('home').populate('away').populate('stadium')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the handballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
+    },
+
+    filterByDateRange: function (req, res) {
+        let startDate
+        let endDate
+        try {
+            startDate = new Date(req.params.startDate)
+            endDate = new Date(req.params.endDate)
+        } catch (dateError) {
+            return res.status(400).json({
+                message: 'Date provided isnt in the correct format, must abide: YYYY-MM-DD',
+                error: dateError
+            })
+        }
+        handballMatchModel.find({date: {$gte: startDate, $lte: endDate}})
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({

@@ -187,6 +187,24 @@ module.exports = {
             })
     },
 
+    filterByTeamName: function (req, res) {
+        const teamName = req.params.teamName
+
+        StandingModel.find()
+            .populate('team',['name', 'logoPath'])
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                const team = standings.filter(standing => standing.team.name === teamName)
+                return res.json(team)
+            })
+    },
+
     filterBySeasonAndTeam: function (req, res) {
         const season = req.params.season
         const team = req.params.team

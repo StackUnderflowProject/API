@@ -9,6 +9,7 @@ const adminCheck = require('../../middleware/adminCheck');
  */
 router.get('/', handballStandingController.list)
 router.get('/filterBySeasonAndTeam/:season/:team', handballStandingController.filterBySeasonAndTeam)
+router.get('/filterByTeamName/:teamName', handballStandingController.filterByTeamName)
 router.get('/filterBySeason/:season', handballStandingController.filterBySeason)
 router.get('/filterByTeam/:team', handballStandingController.filterByTeam)
 /*

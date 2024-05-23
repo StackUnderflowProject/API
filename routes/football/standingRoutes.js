@@ -9,6 +9,7 @@ const adminCheck = require('../../middleware/adminCheck');
  */
 router.get('/', standingController.list)
 router.get('/filterBySeasonAndTeam/:season/:team', standingController.filterBySeasonAndTeam)
+router.get('/filterByTeamName/:teamName', standingController.filterByTeamName)
 router.get('/filterByTeam/:team', standingController.filterByTeam)
 router.get('/filterBySeason/:season', standingController.filterBySeason)
 

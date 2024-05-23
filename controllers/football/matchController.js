@@ -13,8 +13,8 @@ module.exports = {
      */
     list: function (req, res) {
         footballMatchModel.find()
-            .populate('home')
-            .populate('away')
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
             .populate('stadium')
             .exec(function (err, footballMatches) {
                 if (err) {
@@ -34,7 +34,10 @@ module.exports = {
     show: function (req, res) {
         const id = req.params.id
 
-        footballMatchModel.findById(id).populate('home').populate('away').populate('stadium').exec(function (err, footballMatch) {
+        footballMatchModel.findById(id)
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium').exec(function (err, footballMatch) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting footballMatch.',
@@ -58,7 +61,7 @@ module.exports = {
     create: function (req, res) {
 
         if (!req.isAdmin) {
-            return res.status(401).json("Not authorized!");
+            return res.status(401).json("Not authorized!")
         }
 
         const footballMatch = new footballMatchModel({
@@ -91,10 +94,10 @@ module.exports = {
         const id = req.params.id
 
         if (!req.isAdmin) {
-            return res.status(401).json("Not authorized!");
+            return res.status(401).json("Not authorized!")
         }
 
-        footballMatchModel.findOne({ _id: id }, function (err, footballMatch) {
+        footballMatchModel.findOne({_id: id}, function (err, footballMatch) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting footballMatch',
@@ -137,7 +140,7 @@ module.exports = {
         const id = req.params.id
 
         if (!req.isAdmin) {
-            return res.status(401).json("Not authorized!");
+            return res.status(401).json("Not authorized!")
         }
 
         footballMatchModel.findByIdAndRemove(id, function (err, footballMatch) {
@@ -153,81 +156,91 @@ module.exports = {
     },
 
     filterByDate: function (req, res) {
-        let date;
+        let date
         try {
-            date = new Date(req.params.date);
+            date = new Date(req.params.date)
         } catch (dateError) {
             return res.status(400).json({
                 message: "Date provided isn't in the correct format, must abide: YYYY-MM-DD",
             })
         }
         footballMatchModel.find({date: date})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the footballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the footballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterByTeam: function (req, res) {
         footballMatchModel.find({$or: [{away: req.params.teamId}, {home: req.params.teamId}]})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the footballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        }) 
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the footballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterBySeason: function (req, res) {
         footballMatchModel.find({season: req.params.season})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the footballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the footballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterBySeasonAndTeam: function (req, res) {
         footballMatchModel.find({season: req.params.season, $or: [{away: req.params.team}, {home: req.params.team}]})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the footballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the footballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterByStadium: function (req, res) {
         footballMatchModel.find({stadium: req.params.stadium})
-        .populate('home').populate('away').populate('stadium')
-        .exec(function(err, matches) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the footballMatches.',
-                    error: err
-                })
-            }
-            return res.status(200).json(matches);
-        })
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the footballMatches.',
+                        error: err
+                    })
+                }
+                return res.status(200).json(matches)
+            })
     },
 
     filterByLocation: function (req, res) {
@@ -241,27 +254,55 @@ module.exports = {
                     $maxDistance: req.params.radius
                 }
             }
-        };
-        footballStadiumModel.find(locationQuery).select("_id").exec(function(error, stadiums) {
+        }
+        footballStadiumModel.find(locationQuery).select("_id").exec(function (error, stadiums) {
             if (error) {
                 return res.status(500).json({
                     message: 'Error when fetching stadiums in the footballMatches.',
                     error: error
                 })
             }
-            footballMatchModel.find({stadium: { $in: stadiums}})
-            .populate('home').populate('away').populate('stadium')
-            .exec(function(err, matches) {
+            footballMatchModel.find({stadium: {$in: stadiums}})
+                .populate('home', ['name', 'logoPath'])
+                .populate('away', ['name', 'logoPath'])
+                .populate('stadium')
+                .exec(function (err, matches) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when filtering the footballMatches.',
+                            error: err
+                        })
+                    }
+                    return res.status(200).json(matches)
+                })
+        })
+    },
+
+    filterByDateRange: function (req, res) {
+        let startDate
+        let endDate
+        try {
+            startDate = new Date(req.params.startDate)
+            endDate = new Date(req.params.endDate)
+        } catch (dateError) {
+            return res.status(400).json({
+                message: "Date provided isn't in the correct format, must abide: YYYY-MM-DD",
+            })
+        }
+        footballMatchModel.find({date: {$gte: startDate, $lte: endDate}})
+            .populate('home', ['name', 'logoPath'])
+            .populate('away', ['name', 'logoPath'])
+            .populate('stadium')
+            .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when filtering the footballMatches.',
                         error: err
                     })
                 }
-                return res.status(200).json(matches);
+                return res.status(200).json(matches)
             })
-        })
-    },
+    }
 
 
 }
