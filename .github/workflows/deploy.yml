@@ -17,11 +17,14 @@ jobs:
     steps:
       # github kopira nas repository v njihovo izvajalno okolje
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2  
 
-      # izgradimo sliko nasega projekta
     - name: Build Docker image
-      run: docker build -t stackunderflow03/api:latest .
+      run: |
+        docker build \
+          --build-arg DB_URL="${{ secrets.DB_URL }}" \
+          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+          -t stackunderflow03/api:latest .
 
       # za prijavo v DockerHub uporabimo GitHub secrets
     - name: Log in to Docker Hub
