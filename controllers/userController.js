@@ -1,6 +1,6 @@
 var UserModel = require('../models/userModel.js')
 var AdminModel = require('../models/adminModel.js')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 var jwt = require('jsonwebtoken')
 const path = require('path')
 const fs = require('fs')
@@ -136,16 +136,15 @@ module.exports = {
                     })
                 }
                 if (user2) {
-                    if (user2._id != id) {
+                    if (user2._id !== id) {
                         return res.status(409).json({message: "Error user with this username already exists."})
                     }
                 }
                 user.username = req.body.username ? req.body.username : user.username
 
-                if (req.body.username != undefined && req.body.username != "") {
+                if (req.body.username !== undefined && req.body.username !== "") {
                     try {
-                        const hash = await bcrypt.hash(req.body.password, 10)
-                        user.password = hash
+                        user.password = await bcrypt.hash(req.body.password, 10)
                     } catch (error) {
                         return res.status(500).json({
                             message: 'Error when creating user.',
