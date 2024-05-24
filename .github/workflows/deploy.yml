@@ -33,5 +33,6 @@ jobs:
     - name: Send webhook
       uses: distributhor/workflow-webhook@v1
       with:
-        webhook_url: ${{ secrets.WEBHOOK_URL }}
-        args: '{"message": "New Docker image deployed"}'
+        url: ${{ secrets.WEBHOOK_URL }}
+        method: 'POST'
+        payload: '{"message": "New Docker image deployed"}'
