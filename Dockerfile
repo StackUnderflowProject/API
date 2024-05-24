@@ -1,6 +1,14 @@
 # Use the official Node.js 18 Alpine image as base
 FROM node:20-alpine
 
+# Set build arguments (optional)
+ARG DB_URL
+ARG JWT_SECRET
+
+# Set environment variables using build arguments
+ENV DB_URL=$DB_URL
+ENV JWT_SECRET=$JWT_SECRET
+
 # Set the working directory inside the container
 WORKDIR /app
 
