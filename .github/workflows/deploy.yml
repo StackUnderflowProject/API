@@ -33,5 +33,6 @@ jobs:
     - name: Send webhook
       uses: distributhor/workflow-webhook@v1
       with:
-        webhook_url: http://20.56.20.111:5000/webhook
-        args: '{"message": "New Docker image deployed"}'
+        url: 'http://your_azure_vm_ip:3000/webhook'
+        method: 'POST'
+        payload: '{"message": "New Docker image deployed"}'
