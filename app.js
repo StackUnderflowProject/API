@@ -12,6 +12,7 @@ const cors = require("cors");
 let mongoose = require('mongoose').set('strictQuery', true)
 const mongoDB = process.env.DB_URL
 
+console.log("My connection string: " + mongoDB);
 mongoose.connect(mongoDB)
 mongoose.Promise = global.Promise
 let db = mongoose.connection
