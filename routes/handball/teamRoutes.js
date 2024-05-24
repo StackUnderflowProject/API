@@ -3,11 +3,13 @@ const router = express.Router()
 const handballTeamController = require('../../controllers/handball/teamController.js')
 const jwtAuth = require('../../middleware/jwtCheck');
 const adminCheck = require('../../middleware/adminCheck');
+const footballTeamController = require("../../controllers/football/teamController")
 
 /*
  * GET
  */
 router.get('/', handballTeamController.list)
+router.get('/name/:season', handballTeamController.getTeamNamesBySeason)
 router.get('/filterBySeason/:season', handballTeamController.filterBySeason)
 /*
  * GET

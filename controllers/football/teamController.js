@@ -195,5 +195,22 @@ module.exports = {
 
             return res.json(footballTeams)
         })
+    },
+
+    getTeamNamesBySeason: function (req, res) {
+        const season = req.params.season
+
+        FootballteamModel.find({ season: season }, function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            const teamNames = footballTeams.map(team => team.name);
+
+            return res.json(teamNames)
+        })
     }
 }
