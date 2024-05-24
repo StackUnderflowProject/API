@@ -12,7 +12,7 @@ module.exports = {
      */
     list: function (req, res) {
         StadiumModel.find()
-            .populate('teamId')
+            .populate('teamId', 'name')
             .exec(function (err, stadiums) {
                 if (err) {
                     return res.status(500).json({
@@ -32,7 +32,7 @@ module.exports = {
         const id = req.params.id
 
         StadiumModel.findById(id)
-            .populate('teamId')
+            .populate('teamId', 'name')
             .exec(function (err, stadium) {
                 if (err) {
                     return res.status(500).json({
@@ -56,7 +56,7 @@ module.exports = {
         var id = req.params.id
 
         StadiumModel.findOne({teamId: id})
-            .populate('teamId')
+            .populate('teamId', 'name')
             .exec(function (err, stadium) {
                 if (err) {
                     return res.status(500).json({
@@ -183,7 +183,9 @@ module.exports = {
                 }
             }
         };
-        StadiumModel.find(locationQuery).exec(function(error, stadiums) {
+        StadiumModel.find(locationQuery)
+            .populate('teamId', 'name')
+            .exec(function(error, stadiums) {
             if (error) {
                 return res.status(500).json({
                     message: 'Error when fetching stadiums in the handballMatches.',
@@ -196,7 +198,9 @@ module.exports = {
 
     filterBySeason: function (req, res) {
         const season = req.params.season
-        StadiumModel.find({season: season}).exec(function(err, stadiums) {
+        StadiumModel.find({season: season})
+            .populate('teamId', 'name')
+            .exec(function(err, stadiums) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when filtering the handballMatches.',
@@ -219,7 +223,9 @@ module.exports = {
                 }
             }
         };
-        StadiumModel.find(locationQuery).exec(function(error, stadiums) {
+        StadiumModel.find(locationQuery)
+            .populate('teamId', 'name')
+            .exec(function(error, stadiums) {
             if (error) {
                 return res.status(500).json({
                     message: 'Error when fetching stadiums in the handballMatches.',
