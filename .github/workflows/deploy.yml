@@ -23,6 +23,7 @@ jobs:
       run: |
         docker build -t stackunderflow03/api:latest .
 
+        
       # za prijavo v DockerHub uporabimo GitHub secrets
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
