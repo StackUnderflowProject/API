@@ -21,10 +21,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build \
-          --build-arg DB_URL="${{ secrets.DB_URL }}" \
-          --build-arg JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-          -t stackunderflow03/api:latest .
+        docker build -t stackunderflow03/api:latest .
 
       # za prijavo v DockerHub uporabimo GitHub secrets
     - name: Log in to Docker Hub
@@ -36,5 +33,5 @@ jobs:
     - name: Send webhook
       uses: distributhor/workflow-webhook@v1
       with:
-        webhook_url: http://20.56.20.111:5000/webhook
+        webhook_url: ${{ secrets.WEBHOOK_URL }}
         data: '{"message": "New Docker image deployed"}'
