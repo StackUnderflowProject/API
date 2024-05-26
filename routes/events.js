@@ -7,7 +7,7 @@ const adminCheck = require('../middleware/adminCheck');
 /*
  * GET
  */
-router.get('/', eventController.list)
+//router.get('/', eventController.list)
 router.get('/follow/:eventId', jwtAuth, eventController.follow);
 router.get('/upcoming', eventController.listUpcoming);
 
