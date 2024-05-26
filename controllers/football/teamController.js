@@ -212,5 +212,20 @@ module.exports = {
 
             return res.json(teamNames)
         })
+    },
+
+    getTeamNames: function (req, res) {
+        FootballteamModel.find(function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            const teamNames = footballTeams.map(team => team.name);
+
+            return res.json(teamNames)
+        })
     }
 }

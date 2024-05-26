@@ -9,6 +9,7 @@ const footballTeamController = require("../../controllers/football/teamControlle
  * GET
  */
 router.get('/', handballTeamController.list)
+router.get('/name', handballTeamController.getTeamNames)
 router.get('/name/:season', handballTeamController.getTeamNamesBySeason)
 router.get('/filterBySeason/:season', handballTeamController.filterBySeason)
 /*

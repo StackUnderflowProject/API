@@ -191,7 +191,7 @@ module.exports = {
         const teamName = req.params.teamName
 
         StandingModel.find()
-            .populate('team',['name', 'logoPath'])
+            .populate('team')
             .exec(function (err, standings) {
                 if (err) {
                     return res.status(500).json({
@@ -200,7 +200,7 @@ module.exports = {
                     })
                 }
 
-                const team = standings.filter(standing => standing.team.name === teamName)
+                const team = standings.filter(standing => standing.team.name.includes(teamName))
                 return res.json(team)
             })
     },

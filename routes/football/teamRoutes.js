@@ -8,6 +8,7 @@ const adminCheck = require('../../middleware/adminCheck');
  * GET
  */
 router.get('/', footballTeamController.list)
+router.get('/name', footballTeamController.getTeamNames)
 router.get('/name/:season', footballTeamController.getTeamNamesBySeason)
 router.get('/filterBySeason/:season', footballTeamController.filterBySeason)
 /*

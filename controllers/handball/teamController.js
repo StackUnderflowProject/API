@@ -212,5 +212,20 @@ module.exports = {
 
             return res.json(teamNames)
         })
+    },
+
+    getTeamNames: function (req, res) {
+        handballTeamModel.find(function (err, handballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting handballTeams.',
+                    error: err
+                })
+            }
+
+            const teamNames = handballTeams.map(team => team.name)
+
+            return res.json(teamNames)
+        })
     }
 }
