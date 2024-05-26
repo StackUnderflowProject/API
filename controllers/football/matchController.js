@@ -27,6 +27,7 @@ module.exports = {
                 return res.json(footballMatches)
             })
     },
+    
 
     /**
      * footballMatchController.show()
