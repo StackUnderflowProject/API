@@ -17,7 +17,8 @@ var footballMatchSchema = new Schema({
 	'stadium': {
 		type: Schema.Types.ObjectId,
 		ref: 'footballStadium'
-	}
+	},
+	'season': Number
 })
 
 module.exports = mongoose.model('footballMatch', footballMatchSchema)

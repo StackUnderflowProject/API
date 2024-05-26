@@ -1,4 +1,4 @@
-var StandingModel = require('../models/footballStandingModel.js')
+const StandingModel = require('../../models/handball/standingModel.js')
 
 /**
  * standingController.js
@@ -29,7 +29,7 @@ module.exports = {
      * standingController.show()
      */
     show: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
 
         StandingModel.findById(id)
             .populate('team')
@@ -55,7 +55,12 @@ module.exports = {
      * standingController.create()
      */
     create: function (req, res) {
-        var standing = new StandingModel({
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
+        const standing = new StandingModel({
             place: req.body.place,
             team: req.body.team,
             gamesPlayed: req.body.gamesPlayed,
@@ -83,7 +88,11 @@ module.exports = {
      * standingController.update()
      */
     update: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StandingModel.findOne({ _id: id }, function (err, standing) {
             if (err) {
@@ -126,7 +135,11 @@ module.exports = {
      * standingController.remove()
      */
     remove: function (req, res) {
-        var id = req.params.id
+        const id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         StandingModel.findByIdAndRemove(id, function (err, standing) {
             if (err) {
@@ -138,5 +151,76 @@ module.exports = {
 
             return res.status(204).json()
         })
+    },
+
+    filterBySeason: function (req, res) {
+        const season = req.params.season
+
+        StandingModel.find({season: season})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
+    },
+
+    filterByTeam: function (req, res) {
+        const team = req.params.team
+
+        StandingModel.find({team: team})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
+    },
+
+    filterByTeamName: function (req, res) {
+        const teamName = req.params.teamName
+
+        StandingModel.find()
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                const team = standings.filter(standing => standing.team.name.includes(teamName))
+                return res.json(team)
+            })
+    },
+
+
+    filterBySeasonAndTeam: function (req, res) {
+        const season = req.params.season
+        const team = req.params.team
+
+        StandingModel.find({season: season, team: team})
+            .populate('team')
+            .exec(function (err, standings) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting standing.',
+                        error: err
+                    })
+                }
+
+                return res.json(standings)
+            })
     }
 }

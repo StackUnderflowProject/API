@@ -1,4 +1,4 @@
-var FootballteamModel = require('../models/footballTeamModel.js')
+var FootballteamModel = require('../../models/football/teamModel.js')
 
 /**
  * footballTeamController.js
@@ -47,10 +47,55 @@ module.exports = {
         })
     },
 
+    showLatest: function (req, res) {
+        var id = req.params.id;
+
+        FootballteamModel.findOne({ _id: id }, function (err, footballTeam) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            if (!footballTeam) {
+                return res.status(404).json({
+                    message: 'No such footballTeam'
+                })
+            }
+
+            if (footballTeam.season === new Date().getFullYear()) {
+                return res.json(footballTeam)
+            }
+
+            FootballteamModel.findOne({name: footballTeam.name, season: new Date().getFullYear()}, function(error, fTeam) {
+                if (error) {
+                    return res.status(500).json({
+                        message: 'Error when getting footballTeam.',
+                        error: error
+                    })
+                }
+    
+                if (!fTeam) {
+                    return res.status(404).json({
+                        message: 'No such footballTeam'
+                    })
+                }
+
+                return res.json(fTeam);
+            })
+        })
+    },
+
     /**
      * footballTeamController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         var footballTeam = new FootballteamModel({
             _id: req.body._id ? req.body._id : crypto.randomUUID(),
             name: req.body.name,
@@ -77,6 +122,10 @@ module.exports = {
      */
     update: function (req, res) {
         var id = req.params.id
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
 
         FootballteamModel.findOne({ _id: id }, function (err, footballTeam) {
             if (err) {
@@ -117,6 +166,10 @@ module.exports = {
     remove: function (req, res) {
         var id = req.params.id
 
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!");
+        }
+
         FootballteamModel.findByIdAndRemove(id, function (err, footballTeam) {
             if (err) {
                 return res.status(500).json({
@@ -126,6 +179,53 @@ module.exports = {
             }
 
             return res.status(204).json()
+        })
+    },
+
+    filterBySeason: function (req, res) {
+        var season = req.params.season
+
+        FootballteamModel.find({ season: season }, function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            return res.json(footballTeams)
+        })
+    },
+
+    getTeamNamesBySeason: function (req, res) {
+        const season = req.params.season
+
+        FootballteamModel.find({ season: season }, function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            const teamNames = footballTeams.map(team => team.name);
+
+            return res.json(teamNames)
+        })
+    },
+
+    getTeamNames: function (req, res) {
+        FootballteamModel.find(function (err, footballTeams) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting footballTeam.',
+                    error: err
+                })
+            }
+
+            const teamNames = footballTeams.map(team => team.name);
+
+            return res.json(teamNames)
         })
     }
 }

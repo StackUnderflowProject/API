@@ -1,4 +1,4 @@
-var StadiumModel = require('../models/footballStadiumModel.js')
+var StadiumModel = require('../../models/football/stadiumModel.js')
 
 /**
  * stadiumController.js
@@ -12,7 +12,7 @@ module.exports = {
      */
     list: function (req, res) {
         StadiumModel.find()
-            .populate('teamId')
+            .populate('teamId', 'name')
             .exec(function (err, stadiums) {
                 if (err) {
                     return res.status(500).json({
@@ -32,7 +32,7 @@ module.exports = {
         var id = req.params.id
 
         StadiumModel.findById(id)
-            .populate('teamId')
+            .populate('teamId', 'name')
             .exec(function (err, stadium) {
                 if (err) {
                     return res.status(500).json({
@@ -51,10 +51,39 @@ module.exports = {
             })
     },
 
+    showByTeamId: function (req, res) {
+        var id = req.params.id
+
+        StadiumModel.findOne({teamId: id})
+            .populate('teamId', 'name')
+            .exec(function (err, stadium) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting stadium.',
+                        error: err
+                    })
+                }
+
+                if (!stadium) {
+                    return res.status(404).json({
+                        message: 'No such stadium'
+                    })
+                }
+
+                return res.json(stadium)
+            })
+    },
+
+
     /**
      * stadiumController.create()
      */
     create: function (req, res) {
+
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!")
+        }
+
         var stadium = new StadiumModel({
             name: req.body.name,
             teamId: req.body.teamId,
@@ -82,7 +111,13 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id
 
-        StadiumModel.findOne({ _id: id }, function (err, stadium) {
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!")
+        }
+
+        StadiumModel.findOne({_id: id})
+            .populate('teamId', 'name')
+            .exec(function (err, stadium) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting stadium',
@@ -122,6 +157,10 @@ module.exports = {
     remove: function (req, res) {
         var id = req.params.id
 
+        if (!req.isAdmin) {
+            return res.status(401).json("Not authorized!")
+        }
+
         StadiumModel.findByIdAndRemove(id, function (err, stadium) {
             if (err) {
                 return res.status(500).json({
@@ -131,6 +170,70 @@ module.exports = {
             }
 
             return res.status(204).json()
+        })
+    },
+
+    filterByLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.params.radius
+                }
+            }
+        }
+        StadiumModel.find(locationQuery)
+            .populate('teamId', 'name')
+            .exec(function (error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums)
+        })
+    },
+
+    filterBySeason: function (req, res) {
+        StadiumModel.find({season: req.params.season})
+            .populate('teamId', 'name')
+            .exec(function (error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums)
+        })
+    },
+
+    filterBySeasonAndLocation: function (req, res) {
+        const locationQuery = {
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [req.params.longitude, req.params.latitude] // Longitude, Latitude
+                    },
+                    $maxDistance: req.params.radius
+                }
+            }
+        }
+        StadiumModel.find({season: req.params.season})
+            .populate('teamId', 'name')
+            .find(locationQuery).exec(function (error, stadiums) {
+            if (error) {
+                return res.status(500).json({
+                    message: 'Error when fetching stadiums in the footballMatches.',
+                    error: error
+                })
+            }
+            return res.status(200).json(stadiums)
         })
     }
 }

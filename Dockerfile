@@ -1,5 +1,5 @@
 # Use the official Node.js 18 Alpine image as base
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,4 +15,3 @@ EXPOSE 3000
 
 # Command to run the application
 CMD ["node", "bin/www"]
-

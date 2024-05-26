@@ -1,8 +1,16 @@
-<h1>Add football teams</h1>
-<form action="/footballTeam" method="post">
-  <input type="text" name="name" placeholder="Name" />
-  <input type="text" name="president" placeholder="President" />
-  <input type="text" name="director" placeholder="Director" />
-  <input type="text" name="coach" placeholder="Coach" />
-  <button type="submit">Add Team</button>
+<form action="/users/register" method="post">
+    <h1>Register</h1>
+    <label>
+        <span>Username:</span>
+        <input type="text" name="username" placeholder="Username"/>
+    </label>
+    <label>
+        <span>Email:</span>
+        <input type="email" name="email" placeholder="Email">
+    </label>
+    <label>
+        <span>Password:</span>
+        <input type="password" name="password" placeholder="Password"/>
+    </label>
+    <button type="submit">Register</button>
 </form>
