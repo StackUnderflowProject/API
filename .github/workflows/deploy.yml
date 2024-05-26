@@ -34,5 +34,5 @@ jobs:
     - name: Send webhook
       uses: distributhor/workflow-webhook@v1
       with:
-        webhook_url: http://20.56.20.111:5000/webhook
+        webhook_url: "http://20.56.20.111:5000/webhook"
         data: '{"message": "New Docker image deployed"}'
