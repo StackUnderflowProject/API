@@ -83,6 +83,24 @@ module.exports = {
         });
     },
 
+    isAmdin: function (req, res) {
+        AdminModel.findOne({}, function(err, admin) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when checking isAdmin.',
+                    error: err
+                });
+            }
+            if (!admin) {
+                return res.status(500).json({
+                    message: 'No admin object found.',
+                    error: err
+                });
+            }
+            return res.status(200).json({isAdmin: admin.users.includes(req.userData.id)});
+        });
+    },
+
     openAdminGates: function (req, res) {
         if (!isUserAuthorized(req)) {
             return res.status(403).json({

@@ -6,6 +6,8 @@ const adminController = require('../controllers/adminController');
 
 router.get("/", jwtAuth, adminCheck, adminController.list);
 
+router.get("/isAdmin", jwtAuth, adminController.isAmdin);
+
 router.post("/add/:id", jwtAuth, adminCheck, adminController.add);
 
 router.delete("/remove/:id", jwtAuth, adminCheck, adminController.remove);
