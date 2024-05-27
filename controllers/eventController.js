@@ -30,7 +30,9 @@ module.exports = {
     },
 
     listUpcoming: function (req, res) {
-        eventModel.find({ date: { $gte: new Date() } })
+        const date = new Date();
+        date.setHours(0,0,0);
+        eventModel.find({ date: { $gte: date } })
             .populate('host')
             .exec(function (err, events) {
                 if (err) {
