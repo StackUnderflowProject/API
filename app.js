@@ -35,16 +35,10 @@ const handballMatchRouter = require('./routes/handball/matchRoutes')
 let app = express()
 
 // cors rules
-const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173"]
+const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "http://localhost:5174"]
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    },
+    origin: '*',
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
@@ -60,27 +54,19 @@ const io = new Server(server, {
     }
 })
 
-async function createEvent(socket, data) {
+async function createEvent(socket, token) {
     try {
-        const decodedToken = jwt.verify(data.token, process.env.JWT_SECRET)
-        data.host = decodedToken.id
+        jwt.verify(token, process.env.JWT_SECRET)
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
             socket.emit("error", {message: "JWT expired."})
             return
         } else {
-            socket.emit("new-event", {message: "JWT verification failed."})
+            socket.emit("error", {message: "JWT verification failed."})
             return
         }
     }
-    let newEvent = new eventModel(data)
-    newEvent.save(function (err, event) {
-        if (err) {
-            socket.send("error", {message: "failed to create event"})
-        }
-        //socket.broadcast.emit("new-event", data);
-        socket.emit("new-event", event)
-    })
+    socket.broadcast.emit("new-event", "")
 }
 
 io.on("connection", (socket) => {
