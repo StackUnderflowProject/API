@@ -9,6 +9,7 @@ const adminCheck = require('../../middleware/adminCheck');
  */
 router.get('/', footballMatchController.list)
 
+router.get('/countBySeason/:season', footballMatchController.countBySeason)
 router.get('/filterByLocation/:longitude/:latitude/:radius', footballMatchController.filterByLocation);
 router.get('/filterByDateRange/:startDate/:endDate', footballMatchController.filterByDateRange);
 router.get('/filterByTeamAndSeason/:season/:team', footballMatchController.filterBySeasonAndTeam);

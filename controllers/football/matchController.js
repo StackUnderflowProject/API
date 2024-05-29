@@ -27,7 +27,7 @@ module.exports = {
                 return res.json(footballMatches)
             })
     },
-    
+
 
     /**
      * footballMatchController.show()
@@ -197,10 +197,18 @@ module.exports = {
     },
 
     filterBySeason: function (req, res) {
-        footballMatchModel.find({season: req.params.season})
+        const season = req.params.season
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 30
+        const skip = (page - 1) * limit
+
+        footballMatchModel.find({season: season})
+            .sort({date: -1})
             .populate('home', ['name', 'logoPath'])
             .populate('away', ['name', 'logoPath'])
             .populate('stadium')
+            .skip(skip)
+            .limit(limit)
             .exec(function (err, matches) {
                 if (err) {
                     return res.status(500).json({
@@ -208,8 +216,22 @@ module.exports = {
                         error: err
                     })
                 }
+
                 return res.status(200).json(matches)
             })
+    },
+
+    countBySeason: function (req, res) {
+        const season = req.params.season
+        footballMatchModel.countDocuments({season: season}, function (err, count) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when counting the footballMatches.',
+                    error: err
+                })
+            }
+            return res.status(200).json(count)
+        })
     },
 
     filterBySeasonAndTeam: function (req, res) {
