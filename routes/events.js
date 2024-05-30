@@ -5,6 +5,7 @@ const jwtAuth = require('../middleware/jwtCheck');
 const adminCheck = require('../middleware/adminCheck');
 
 /*
+
  * GET
  */
 router.get('/', eventController.list)

@@ -136,13 +136,15 @@ module.exports = {
                     })
                 }
                 if (user2) {
-                    if (user2._id !== id) {
+                    if (!user2._id.equals(id)) {
+                        console.log(user2._id);
+                        console.log(id);
                         return res.status(409).json({message: "Error user with this username already exists."})
                     }
                 }
                 user.username = req.body.username ? req.body.username : user.username
 
-                if (req.body.username !== undefined && req.body.username !== "") {
+                if (req.body.password !== undefined && req.body.password !== "") {
                     try {
                         user.password = await bcrypt.hash(req.body.password, 10)
                     } catch (error) {

@@ -73,6 +73,9 @@ io.on("connection", (socket) => {
     socket.on("create-event", (data) => {
         createEvent(socket, data)
     })
+    socket.on("delete-event", () => {
+        socket.broadcast.emit("delete-event");
+    })
 })
 
 server.listen(3001, () => {

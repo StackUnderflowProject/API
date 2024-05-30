@@ -1,7 +1,7 @@
 const eventModel = require('../models/eventModel.js')
 
 function isAuthorized(req, event) {
-    return (event.host.equals(req.userData.id) || req.isAdmin);
+    return (event && event.host && event.host.equals(req.userData.id) || req.isAdmin);
 } 
 
 /**
@@ -75,7 +75,6 @@ module.exports = {
      * eventController.create()
      */
     create: function (req, res) {
-        console.log(req.body)
         const event = new eventModel({
             name: req.body.name,
             description: req.body.description,
