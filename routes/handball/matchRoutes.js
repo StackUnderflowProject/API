@@ -9,9 +9,9 @@ const adminCheck = require('../../middleware/adminCheck');
  */
 router.get('/', handballMatchController.list)
 
+router.get('/filterBySeasonAndTeam/:season/:team', handballMatchController.filterBySeasonAndTeam);
 router.get('/countBySeason/:season', handballMatchController.countBySeason)
 router.get('/filterByLocation/:longitude/:latitude/:radius', handballMatchController.filterByLocation);
-router.get('/filterBySeasonAndTeam/:season/:team', handballMatchController.filterBySeasonAndTeam);
 router.get('/filterByDateRange/:startDate/:endDate', handballMatchController.filterByDateRange);
 router.get('/filterByTeam/:teamId', handballMatchController.filterByTeam);
 router.get('/filterByStadium/:stadium', handballMatchController.filterByStadium);
