@@ -40,7 +40,7 @@ const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "
 app.use(cors({
     origin: 'http://20.56.20.111/',
     //methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    //credentials: true // Allow credentials (cookies, authorization headers, etc.)
+    credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
 // Web Socket
@@ -51,7 +51,8 @@ const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
         origin: "http://20.56.20.111/",
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        credentials: true
     }
 })
 
