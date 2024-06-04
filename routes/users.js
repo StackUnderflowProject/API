@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 /* GET users listing. */
-//router.get('/', userController.list);
+router.get('/', userController.list);
 
 router.get('/show/:id', userController.show);
 
@@ -32,6 +32,6 @@ router.delete('/:id', jwtAuth, adminCheck, userController.remove);
 
 router.put('/update/:id', jwtAuth, adminCheck, userController.update);
 
-router.post('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
+router.put('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
 
 module.exports = router;
