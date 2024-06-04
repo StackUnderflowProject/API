@@ -49,7 +49,7 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "http://20.56.20.111:80",
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
     }
 })
