@@ -48,6 +48,7 @@ module.exports = {
                 })
             }
             users.forEach(user => user.password = undefined);
+            console.log("changed to this")
             return res.json(users)
         })
     },

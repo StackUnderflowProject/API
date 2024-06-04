@@ -43,8 +43,6 @@ app.use(cors({
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
-console.log("changed")
-
 // Web Socket
 const eventModel = require('./models/eventModel')
 const jwt = require('jsonwebtoken')
