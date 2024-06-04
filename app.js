@@ -38,7 +38,7 @@ let app = express()
 const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "http://localhost:5174"]
 
 app.use(cors({
-    origin: 'http://20.56.20.111',
+    origin: 'http://20.56.20.111/',
     //credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
