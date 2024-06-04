@@ -39,7 +39,7 @@ const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "
 
 app.use(cors({
     origin: 'http://20.56.20.111',
-    credentials: true // Allow credentials (cookies, authorization headers, etc.)
+    //credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
 // Web Socket
