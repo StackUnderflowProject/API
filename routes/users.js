@@ -9,7 +9,7 @@ const userController = require("../controllers/userController");
 // profile pictures setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/images/profile_pictures");
+    cb(null, "/home/MatijaPajenk/public/images/profile_pictures");
   },
   filename: (req, file, cb) => {
     var date = Date.now();
@@ -32,6 +32,6 @@ router.delete('/:id', jwtAuth, adminCheck, userController.remove);
 
 router.put('/update/:id', jwtAuth, adminCheck, userController.update);
 
-router.post('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
+router.put('/profilePicture', jwtAuth, upload.single('profile_picture'), userController.uploadProfilePicture);
 
 module.exports = router;

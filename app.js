@@ -38,7 +38,8 @@ let app = express()
 const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "http://localhost:5174"]
 
 app.use(cors({
-    origin: '*',
+    origin: 'http://20.56.20.111',
+    //methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
@@ -49,8 +50,9 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
+        origin: "http://20.56.20.111",
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        credentials: true
     }
 })
 
@@ -90,7 +92,7 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static('/home/MatijaPajenk/public'))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
