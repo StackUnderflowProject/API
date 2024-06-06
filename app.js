@@ -34,12 +34,9 @@ const handballMatchRouter = require('./routes/handball/matchRoutes')
 
 let app = express()
 
-// cors rules
-const allowedOrigins = ['*', 'http://localhost:3000', "http://localhost:5173", "http://localhost:5174"]
-
 app.use(cors({
-    origin: 'http://20.56.20.111',
-    //methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: ['http://20.56.20.111', 'http://localhost'],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
 
@@ -50,11 +47,12 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: "http://20.56.20.111",
+        origin: ["http://20.56.20.111", "http://localhost"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true
     }
 })
+
 
 async function createEvent(socket, token) {
     try {
