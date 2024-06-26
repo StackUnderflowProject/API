@@ -9,7 +9,7 @@ const userController = require("../controllers/userController");
 // profile pictures setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/home/MatijaPajenk/public/images/profile_pictures");
+    cb(null, "./public/images/profile_pictures");
   },
   filename: (req, file, cb) => {
     var date = Date.now();

@@ -12,6 +12,7 @@ RUN npm install
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
+EXPOSE 3001
 
 # Command to run the application
 CMD ["node", "bin/www"]
