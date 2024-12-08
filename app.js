@@ -5,7 +5,7 @@ let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 require("dotenv").config()
 const http = require("http")
-const {Server} = require("socket.io")
+const { Server } = require("socket.io")
 const cors = require("cors")
 
 // MongoDB
@@ -35,7 +35,7 @@ const handballMatchRouter = require('./routes/handball/matchRoutes')
 let app = express()
 
 app.use(cors({
-    origin: ['http://20.56.20.111', 'http://localhost'],
+    origin: ['http://20.56.20.111', 'http://localhost', "http://192.168.0.236"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
@@ -47,7 +47,7 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: ["http://20.56.20.111", "http://localhost"],
+        origin: ["http://20.56.20.111", "http://localhost", "http://192.168.0.236"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true
     }
@@ -59,10 +59,10 @@ async function createEvent(socket, token) {
         jwt.verify(token, process.env.JWT_SECRET)
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
-            socket.emit("error", {message: "JWT expired."})
+            socket.emit("error", { message: "JWT expired." })
             return
         } else {
-            socket.emit("error", {message: "JWT verification failed."})
+            socket.emit("error", { message: "JWT verification failed." })
             return
         }
     }
@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
         createEvent(socket, data)
     })
     socket.on("delete-event", () => {
-        socket.broadcast.emit("delete-event");
+        socket.broadcast.emit("delete-event")
     })
 })
 
@@ -88,7 +88,7 @@ app.set('view engine', 'hbs')
 
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static('./public'))
 
