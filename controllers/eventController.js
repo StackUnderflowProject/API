@@ -1,8 +1,9 @@
 const eventModel = require('../models/eventModel.js')
+const {join} = require("node:path")
 
 function isAuthorized(req, event) {
-    return (event && event.host && event.host.equals(req.userData.id) || req.isAdmin);
-} 
+    return (event && event.host && event.host.equals(req.userData.id) || req.isAdmin)
+}
 
 /**
  * eventController.js
@@ -24,28 +25,35 @@ module.exports = {
                         error: err
                     })
                 }
-                events.forEach(event => event.host.password = undefined);
+                events.forEach(event => {
+                    event.host.password = undefined
+                    if (event.image) event.image = join('public', 'images', 'events', event.image)
+                })
                 return res.json(events)
             })
     },
 
     listUpcoming: function (req, res) {
-        const date = new Date();
-        date.setHours(0,0,0);
-        eventModel.find({ date: { $gte: date } })
+        const date = new Date()
+        date.setHours(0, 0, 0)
+        eventModel.find({date: {$gte: date}})
             .populate('host')
             .exec(function (err, events) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when getting events.',
                         error: err
-                    });
+                    })
                 }
-                events.forEach(event => event.host.password = undefined);
-                return res.json(events);
-            });
+                events.forEach(event => {
+                        event.host.password = undefined
+                        if (event.image) event.image = join('public', 'images', 'events', event.image)
+                    }
+                )
+                return res.json(events)
+            })
     },
-    
+
 
     /**
      * eventController.show()
@@ -66,7 +74,8 @@ module.exports = {
                     message: 'No such event'
                 })
             }
-            event.host.password = undefined;
+            event.host.password = undefined
+            if (event.image) event.image = join('public', 'images', 'events', event.image)
             return res.json(event)
         })
     },
@@ -99,8 +108,8 @@ module.exports = {
         })
     },
 
-    follow: function(req, res) {
-        eventModel.findById(req.params.eventId, function(err, event) {
+    follow: function (req, res) {
+        eventModel.findById(req.params.eventId, function (err, event) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when following event',
@@ -114,9 +123,9 @@ module.exports = {
             }
 
             if (event.followers.includes(req.userData.id)) {
-                event.followers = event.followers.filter(userId => userId != req.userData.id);
+                event.followers = event.followers.filter(userId => userId != req.userData.id)
             } else {
-                event.followers.push(req.userData.id);
+                event.followers.push(req.userData.id)
             }
 
             event.save(function (err, event) {
@@ -126,10 +135,31 @@ module.exports = {
                         error: err
                     })
                 }
-    
+
                 return res.status(200).json(event)
             })
         })
+    },
+
+    uploadImage: async (req, res) => {
+        try {
+            const eventId = req.params.id
+            const event = await eventModel.findById(eventId)
+
+            if (!event) {
+                return res.status(404).json({message: 'Event not found'})
+            }
+
+            // Save the image URL in the event document
+            event.image = req.file.filename
+            await event.save()
+
+            event.image = join('public', 'images', 'events', event.image)
+
+            res.status(200).json({message: 'Image uploaded successfully', event})
+        } catch (error) {
+            res.status(500).json({message: error.message})
+        }
     },
 
 
@@ -139,7 +169,7 @@ module.exports = {
     update: function (req, res) {
         const id = req.params.id
 
-        eventModel.findOne({ _id: id }, function (err, event) {
+        eventModel.findOne({_id: id}, function (err, event) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting event',
@@ -198,39 +228,39 @@ module.exports = {
                 return res.status(401).json({message: "Not authorized!"})
             }
 
-            event.remove(function(err) {
+            event.remove(function (err) {
                 if (err) {
                     return res.status(500).json({
                         message: 'Error when deleting the event.',
                         error: err
-                    });
+                    })
                 }
-                return res.status(204).json();
-            });        
+                return res.status(204).json()
+            })
         })
     },
 
     filterByDate: function (req, res) {
-        let date;
+        let date
         try {
-            date = new Date(req.body.date);
+            date = new Date(req.body.date)
         } catch (dateError) {
             return res.status(400).json({
                 message: "Date provided isn't in the correct format, must abide: YYYY-MM-DD",
             })
         }
         eventModel.find({date: date})
-        .populate('host')
-        .exec(function(err, events) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the events.',
-                    error: err
-                })
-            }
-            events.forEach(event => event.host.password = undefined);
-            return res.status(200).json(events);
-        })
+            .populate('host')
+            .exec(function (err, events) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the events.',
+                        error: err
+                    })
+                }
+                events.forEach(event => event.host.password = undefined)
+                return res.status(200).json(events)
+            })
     },
 
     filterByLocation: function (req, res) {
@@ -244,47 +274,68 @@ module.exports = {
                     $maxDistance: req.params.radius
                 }
             }
-        };
-        eventModel.find(locationQuery).populate("host").exec(function(error, events) {
+        }
+        eventModel.find(locationQuery).populate("host").exec(function (error, events) {
             if (error) {
                 return res.status(500).json({
                     message: 'Error when fetching events.',
                     error: error
                 })
             }
-            events.forEach(event => event.host.password = undefined);
-            return res.status(200).json(events);
+            events.forEach(event => event.host.password = undefined)
+            return res.status(200).json(events)
         })
     },
 
     filterByHost: function (req, res) {
         eventModel.find({host: req.params.hostId})
-        .populate('host')
-        .exec(function(err, events) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the eventes.',
-                    error: err
-                })
-            }
-            events.forEach(event => event.host.password = undefined);
-            return res.status(200).json(events);
-        })
+            .populate('host')
+            .exec(function (err, events) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the eventes.',
+                        error: err
+                    })
+                }
+                events.forEach(event => event.host.password = undefined)
+                return res.status(200).json(events)
+            })
     },
 
     filterByActivity: function (req, res) {
         eventModel.find({activity: req.params.activityName.toLowerCase()})
-        .populate('host')
-        .exec(function(err, events) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when filtering the events.',
-                    error: err
-                })
-            }
-            events.forEach(event => event.host.password = undefined);
-            return res.status(200).json(events);
-        })
+            .populate('host')
+            .exec(function (err, events) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when filtering the events.',
+                        error: err
+                    })
+                }
+                events.forEach(event => event.host.password = undefined)
+                return res.status(200).json(events)
+            })
     },
+
+    patchPredictedCount: async (req, res) => {
+        const {id} = req.params
+        const {predicted_count} = req.body
+
+        try {
+            const event = await eventModel.findByIdAndUpdate(
+                id,
+                {$set: {predicted_count}},
+                {new: true}
+            )
+            if (!event) {
+                return res.status(404).send({message: 'Event not found'})
+            }
+            event.predicted_count = predicted_count
+            res.status(200).send(event)
+        } catch (error) {
+            console.error('Error updating predicted count:', error)
+            res.status(500).send({message: 'Failed to update predicted count'})
+        }
+    }
 
 }
