@@ -16,7 +16,9 @@ var eventSchema = new Schema({
 		required: false
 	},
 	'host': {type: Schema.Types.ObjectId, ref: "user", required: true},
-    'followers': {type: [{type: Schema.Types.ObjectId, ref: 'user'}], required: true}
+    'followers': {type: [{type: Schema.Types.ObjectId, ref: 'user'}], required: true},
+	'image': {type: String },
+	'predicted_count': {type: Number, default: 0},
 })
 
 module.exports = mongoose.model('event', eventSchema)

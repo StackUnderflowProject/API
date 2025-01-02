@@ -3,7 +3,7 @@ var router = express.Router()
 var eventController = require('../controllers/eventController')
 const jwtAuth = require('../middleware/jwtCheck');
 const adminCheck = require('../middleware/adminCheck');
-
+const upload = require('../middleware/upload');
 /*
 
  * GET
@@ -27,14 +27,19 @@ router.get('/:id', eventController.show)
  */
 router.post('/', jwtAuth, eventController.create)
 
+router.post('/:id/image', upload.single('image'), eventController.uploadImage)
 /*
  * PUT
  */
 router.put('/:id', jwtAuth, adminCheck, eventController.update)
 
+router.patch("/:id/predicted-count", jwtAuth, eventController.patchPredictedCount);
+
 /*
  * DELETE
  */
 router.delete('/:id', jwtAuth, adminCheck, eventController.remove)
+
+
 
 module.exports = router

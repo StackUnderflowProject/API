@@ -10,7 +10,7 @@ function isUserAuthorized(req, user) {
     if (req.userData.username === user.username) {
         return true
     }
-    return req.isAdmin;
+    return req.isAdmin
 }
 
 async function addAdminIfGatesOpen(user) {
@@ -47,7 +47,7 @@ module.exports = {
                     error: err
                 })
             }
-            users.forEach(user => user.password = undefined);
+            users.forEach(user => user.password = undefined)
             return res.json(users)
         })
     },
@@ -71,7 +71,8 @@ module.exports = {
                     message: 'No such user'
                 })
             }
-            user.password = undefined;
+            user.password = undefined
+            console.log(user.image)
             return res.json(user)
         })
     },
@@ -81,29 +82,29 @@ module.exports = {
      */
     create: async function (req, res) {
         try {
-            const existingUser = await UserModel.findOne({ username: req.body.username });
+            const existingUser = await UserModel.findOne({username: req.body.username})
 
             if (existingUser) {
-                return res.status(400).json({ message: "User with this username already exists." });
+                return res.status(400).json({message: "User with this username already exists."})
             }
 
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
             const newUser = new UserModel({
                 username: req.body.username,
                 password: hashedPassword,
                 email: req.body.email
-            });
-            const savedUser = await newUser.save();
-            savedUser.password = undefined;
-            addAdminIfGatesOpen(savedUser);
-            return res.status(201).json(savedUser);
+            })
+            const savedUser = await newUser.save()
+            savedUser.password = undefined
+            addAdminIfGatesOpen(savedUser)
+            return res.status(201).json(savedUser)
         } catch (err) {
-            console.error('Error when creating user:', err);
+            console.error('Error when creating user:', err)
             return res.status(500).json({
                 message: 'Error when creating user',
                 error: err.message
-            });
+            })
         }
     },
 
@@ -137,8 +138,8 @@ module.exports = {
                 }
                 if (user2) {
                     if (!user2._id.equals(id)) {
-                        console.log(user2._id);
-                        console.log(id);
+                        console.log(user2._id)
+                        console.log(id)
                         return res.status(409).json({message: "Error user with this username already exists."})
                     }
                 }
@@ -164,7 +165,7 @@ module.exports = {
                             error: err
                         })
                     }
-                    user.password = undefined;
+                    user.password = undefined
                     return res.json(user)
                 })
             })
@@ -214,7 +215,7 @@ module.exports = {
 
             // Delete existing profile picture if it exists
             if (user.image && user.image !== "") {
-                const imagePath = path.join(__dirname, '..', 'public', 'images', 'profile_pictures', user.image)
+                const imagePath = path.join('public', 'images', 'profile_pictures', user.image)
                 await fs.promises.access(imagePath, fs.constants.F_OK)
                 await fs.promises.unlink(imagePath)
                 console.log('Image deleted successfully')
@@ -249,9 +250,9 @@ module.exports = {
                 process.env.JWT_SECRET,
                 {expiresIn: "1h"}
             )
-            const userObject = user.toObject();
-            userObject.token = token;
-            delete userObject.password;
+            const userObject = user.toObject()
+            userObject.token = token
+            delete userObject.password
 
             return res.status(200).json(userObject)
         })
