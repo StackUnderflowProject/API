@@ -2,9 +2,6 @@ name: Deploy
 
 # action se bo izvedel ko pushamo ali pa mergamo na production vejo
 on:
-  push:
-    branches:
-      - production
   pull_request:
     branches:
       - production
