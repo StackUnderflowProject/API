@@ -46,7 +46,7 @@ module.exports = {
                     })
                 }
                 events.forEach(event => {
-                        event.host.password = undefined
+                        if(event.host.password) event.host.password = undefined
                         if (event.image) event.image = join('public', 'images', 'events', event.image)
                     }
                 )
@@ -74,7 +74,7 @@ module.exports = {
                     message: 'No such event'
                 })
             }
-            event.host.password = undefined
+            if(event.host.password) event.host.password = undefined
             if (event.image) event.image = join('public', 'images', 'events', event.image)
             return res.json(event)
         })
