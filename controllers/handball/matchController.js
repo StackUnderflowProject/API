@@ -287,7 +287,6 @@ module.exports = {
     filterBySeasonAndTeam: function (req, res) {
         const season = req.params.season
         const teamId = req.params.team
-        console.log(season, teamId)
         handballMatchModel.find({season: season, $or: [{away: teamId}, {home: teamId}]})
             .populate('home', ['name', 'logoPath'])
             .populate('away', ['name', 'logoPath'])

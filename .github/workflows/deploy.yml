@@ -26,9 +26,3 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: docker push stackunderflow03/api:latest
-
-      - name: Send webhook
-        uses: distributhor/workflow-webhook@v3
-        with:
-          webhook_url: "${{ secrets.WEBHOOK_URL }}"
-          data: '{"message": "New Docker image deployed"}'
