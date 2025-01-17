@@ -35,7 +35,7 @@ const handballMatchRouter = require('./routes/handball/matchRoutes')
 let app = express()
 
 app.use(cors({
-    origin: ['http://20.56.20.111', 'http://localhost', "http://192.168.0.236", "http://77.38.76.152"],
+    origin: ['http://localhost', "http://77.38.76.152"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }))
@@ -47,7 +47,7 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
-        origin: ["http://20.56.20.111", "http://localhost", "http://77.38.76.152", "*"],
+        origin: ["http://localhost", "http://77.38.76.152", "*"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true
     }
